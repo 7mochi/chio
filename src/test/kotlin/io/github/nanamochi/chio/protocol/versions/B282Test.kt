@@ -1,6 +1,13 @@
 package io.github.nanamochi.chio.protocol.versions
 
 import io.github.nanamochi.chio.binary.BinaryReader
+import io.github.nanamochi.chio.packet.inbound.CantSpectatePacket
+import io.github.nanamochi.chio.packet.inbound.ErrorReportPacket
+import io.github.nanamochi.chio.packet.inbound.ExitPacket
+import io.github.nanamochi.chio.packet.inbound.PongPacket
+import io.github.nanamochi.chio.packet.inbound.StartSpectatingPacket
+import io.github.nanamochi.chio.packet.inbound.StatusUpdateRequestPacket
+import io.github.nanamochi.chio.packet.inbound.StopSpectatingPacket
 import io.github.nanamochi.chio.packet.model.Message
 import io.github.nanamochi.chio.packet.model.ReplayFrame
 import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
@@ -9,7 +16,9 @@ import io.github.nanamochi.chio.packet.model.UserQuit
 import io.github.nanamochi.chio.packet.model.testStats
 import io.github.nanamochi.chio.packet.model.testStatus
 import io.github.nanamochi.chio.packet.model.testUserInfo
+import io.github.nanamochi.chio.packet.outbound.InvitePacket
 import io.github.nanamochi.chio.packet.outbound.IrcChangeUsernamePacket
+import io.github.nanamochi.chio.packet.outbound.IrcQuitPacket
 import io.github.nanamochi.chio.packet.outbound.LoginReplyPacket
 import io.github.nanamochi.chio.packet.outbound.MessagePacket
 import io.github.nanamochi.chio.packet.outbound.PingPacket
@@ -468,6 +477,94 @@ class B282Test {
             )
 
         assertEquals(expected, bundle)
+    }
+
+    @Test
+    fun `read exit`() {
+        assertEquals(
+            ExitPacket,
+            protocol.decode(hex("0200140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read start spectating`() {
+        assertEquals(
+            StartSpectatingPacket(42),
+            protocol.decode(hex("1100180000001f8b08000000000002ffd362606000004690cbee04000000")),
+        )
+    }
+
+    @Test
+    fun `read error report`() {
+        assertEquals(
+            ErrorReportPacket("test error"),
+            protocol.decode(
+                hex("1500200000001f8b08000000000002ffe3e62a492d2e51482d2aca2f0200fdf715a70c000000")
+            ),
+        )
+    }
+
+    @Test
+    fun `read pong`() {
+        assertEquals(
+            PongPacket,
+            protocol.decode(hex("0400140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read status update request`() {
+        assertEquals(
+            StatusUpdateRequestPacket,
+            protocol.decode(hex("0300140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read stop spectating`() {
+        assertEquals(
+            StopSpectatingPacket,
+            protocol.decode(hex("1200140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read cant spectate`() {
+        assertEquals(
+            CantSpectatePacket,
+            protocol.decode(hex("1600140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `irc quit`() {
+        protocol.assertPacket(
+            "0a001f0000001f8b08000000000002ffe3e62c492d2e89cf4bcc4d0500055de0090b000000",
+            protocol.encode(IrcQuitPacket("test_name")),
+        )
+    }
+
+    @Test
+    fun `invite is sent as a message`() {
+        protocol.assertPacket(
+            "07002d0000001f8b08000000000002ffe3e62d492d2e892f2d4e2dca4bcc4de5e6017373538b8b13d35301d614a6031d000000",
+            protocol.encode(InvitePacket(Message("test_username", "test_message", "#osu", 3))),
+        )
+    }
+
+    @Test
+    fun `user quit while osu remains is dropped`() {
+        val quit = UserQuit(testUserInfo(), QuitState.OsuRemaining)
+        assertEquals(0, protocol.encode(UserQuitPacket(quit)).size)
+    }
+
+    @Test
+    fun `user quit irc user who leaves sends irc quit`() {
+        protocol.assertPacket(
+            "0a00230000001f8b08000000000002ffe3e62d492d2e892f2d4e2dca4bcc4d0500e19e94dc0f000000",
+            protocol.encode(UserQuitPacket(UserQuit(testUserInfo(isIrc = true), QuitState.Gone))),
+        )
     }
 }
 
