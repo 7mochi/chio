@@ -1,6 +1,7 @@
 package io.github.nanamochi.chio.protocol.versions
 
 import io.github.nanamochi.chio.binary.BinaryReader
+import io.github.nanamochi.chio.packet.inbound.PrivateMessagePacket
 import io.github.nanamochi.chio.packet.model.Message
 import io.github.nanamochi.chio.packet.model.ReplayFrame
 import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
@@ -63,6 +64,18 @@ class B294Test {
         val message =
             readChannelMessageV282(BinaryReader(Buffer().apply { write(hex("0b0473686974")) }))
         assertEquals(Message("", "shit", "#osu"), message)
+    }
+
+    @Test
+    fun `read private message`() {
+        assertEquals(
+            PrivateMessagePacket(Message("", "private message", "test_username_2")),
+            protocol.decode(
+                hex(
+                    "1a00370000001f8b08000000000002ffe3e62f492d2e892f2d4e2dca4bcc4d8d37e2e62f28ca2c4b2c4955c84d2d2e4e4c4f650400c993364623000000"
+                )
+            ),
+        )
     }
 
     @Test
