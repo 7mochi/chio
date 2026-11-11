@@ -1,7 +1,7 @@
 # Chio
 
 **Chio (Bancho I/O)** is a Kotlin library for serializing and deserializing osu! Bancho packets. It
-targets osu! versions from 2008 through 2026, and coverage is still growing. It's a port of
+targets osu! versions released between 2008 and 2026. Not all of them are implemented yet. It's a port of
 [chio.py](https://github.com/Lekuruu/chio.py) and
 [chio-sharp](https://github.com/Lekuruu/chio-sharp). The API is designed for Kotlin and can also
 be used from Java.
