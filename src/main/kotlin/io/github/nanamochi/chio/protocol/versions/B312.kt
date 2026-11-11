@@ -37,10 +37,14 @@ private fun ProtocolBuilder.registerInbound() {
 private fun ProtocolBuilder.registerOutbound() {
     encodeEmpty<OutboundMatchStartPacket>(PacketType.BanchoMatchStart)
     encode(
-        PacketEncoder<OutboundMatchScoreUpdatePacket> { _, packet ->
-            val writer = BinaryWriter()
-            writer.writeScoreFrameV296(packet.frame)
-            listOf(EncodedPacket(PacketType.BanchoMatchScoreUpdate, writer.toByteArray()))
+        PacketEncoder<OutboundMatchScoreUpdatePacket> { protocol, packet ->
+            if (packet.frame.id >= protocol.slotSize) {
+                emptyList()
+            } else {
+                val writer = BinaryWriter()
+                writer.writeScoreFrameV296(packet.frame)
+                listOf(EncodedPacket(PacketType.BanchoMatchScoreUpdate, writer.toByteArray()))
+            }
         }
     )
     encode(

@@ -77,9 +77,17 @@ private fun ProtocolBuilder.registerInbound() {
 private fun ProtocolBuilder.registerOutbound() {
     encodeEmpty<MatchTransferHostPacket>(PacketType.BanchoMatchTransferHost)
     encodeEmpty<MatchAllPlayersLoadedPacket>(PacketType.BanchoMatchAllPlayersLoaded)
-    encode<MatchPlayerFailedPacket>(PacketType.BanchoMatchPlayerFailed) {
-        writeInt(it.userId)
-    }
+    encode(
+        PacketEncoder<MatchPlayerFailedPacket> { protocol, packet ->
+            if (packet.userId >= protocol.slotSize) {
+                emptyList()
+            } else {
+                val writer = BinaryWriter()
+                writer.writeInt(packet.userId)
+                listOf(EncodedPacket(PacketType.BanchoMatchPlayerFailed, writer.toByteArray()))
+            }
+        }
+    )
     encodeEmpty<MatchCompletePacket>(PacketType.BanchoMatchComplete)
     encode(
         PacketEncoder<OutboundMatchStartPacket> { protocol, packet ->
@@ -89,10 +97,14 @@ private fun ProtocolBuilder.registerOutbound() {
         }
     )
     encode(
-        PacketEncoder<OutboundMatchScoreUpdatePacket> { _, packet ->
-            val writer = BinaryWriter()
-            writer.writeScoreFrameV334(packet.frame)
-            listOf(EncodedPacket(PacketType.BanchoMatchScoreUpdate, writer.toByteArray()))
+        PacketEncoder<OutboundMatchScoreUpdatePacket> { protocol, packet ->
+            if (packet.frame.id >= protocol.slotSize) {
+                emptyList()
+            } else {
+                val writer = BinaryWriter()
+                writer.writeScoreFrameV334(packet.frame)
+                listOf(EncodedPacket(PacketType.BanchoMatchScoreUpdate, writer.toByteArray()))
+            }
         }
     )
     encode(
