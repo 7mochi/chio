@@ -56,23 +56,23 @@ private fun ProtocolBuilder.registerInbound() {
 
 private fun ProtocolBuilder.registerOutbound() {
     encode(
-        PacketEncoder<MatchUpdatePacket> { _, packet ->
+        PacketEncoder<MatchUpdatePacket> { protocol, packet ->
             if (packet.match.id > 0xFF) {
                 emptyList()
             } else {
                 val writer = BinaryWriter()
-                writer.writeMatchV298(packet.match)
+                writer.writeMatchV298(packet.match, protocol.slotSize)
                 listOf(EncodedPacket(PacketType.BanchoMatchUpdate, writer.toByteArray()))
             }
         }
     )
     encode(
-        PacketEncoder<MatchNewPacket> { _, packet ->
+        PacketEncoder<MatchNewPacket> { protocol, packet ->
             if (packet.match.id > 0xFF) {
                 emptyList()
             } else {
                 val writer = BinaryWriter()
-                writer.writeMatchV298(packet.match)
+                writer.writeMatchV298(packet.match, protocol.slotSize)
                 listOf(EncodedPacket(PacketType.BanchoMatchNew, writer.toByteArray()))
             }
         }
@@ -87,9 +87,9 @@ private fun ProtocolBuilder.registerOutbound() {
         writeInt(it.userId)
     }
     encode(
-        PacketEncoder<MatchJoinSuccessPacket> { _, packet ->
+        PacketEncoder<MatchJoinSuccessPacket> { protocol, packet ->
             val writer = BinaryWriter()
-            writer.writeMatchV298(packet.match)
+            writer.writeMatchV298(packet.match, protocol.slotSize)
             listOf(EncodedPacket(PacketType.BanchoMatchJoinSuccess, writer.toByteArray()))
         }
     )

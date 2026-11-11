@@ -4,7 +4,13 @@ import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.types.SlotStatus
 
-private fun BinaryWriter.writeMatchV298Layout(match: Match, includeInProgress: Boolean) {
+private fun BinaryWriter.writeMatchV298Layout(
+    match: Match,
+    slotSize: Int,
+    includeInProgress: Boolean,
+) {
+    val slots = match.withMinimumSlotCount(slotSize).slots
+
     writeUByte(match.id)
     if (includeInProgress) writeBoolean(match.inProgress)
     writeUByte(match.type.value)
@@ -12,21 +18,23 @@ private fun BinaryWriter.writeMatchV298Layout(match: Match, includeInProgress: B
     writeString(match.beatmapText)
     writeInt(match.beatmapId)
     writeString(match.beatmapChecksum)
-    writeBooleanList(match.slots.map { it.status == SlotStatus.Open })
-    writeBooleanList(match.slots.map { it.hasPlayer })
-    writeBooleanList(match.slots.map { it.status == SlotStatus.Ready })
-    match.slots.filter { it.hasPlayer }.forEach { writeInt(it.userId) }
+    writeBooleanList(slots.map { it.status == SlotStatus.Open })
+    writeBooleanList(slots.map { it.hasPlayer })
+    writeBooleanList(slots.map { it.status == SlotStatus.Ready })
+    slots.filter { it.hasPlayer }.forEach { writeInt(it.userId) }
 }
 
-fun BinaryWriter.writeMatchV298(match: Match) {
-    writeMatchV298Layout(match, includeInProgress = false)
+fun BinaryWriter.writeMatchV298(match: Match, slotSize: Int) {
+    writeMatchV298Layout(match, slotSize, includeInProgress = false)
 }
 
-fun BinaryWriter.writeMatchV312(match: Match) {
-    writeMatchV298Layout(match, includeInProgress = true)
+fun BinaryWriter.writeMatchV312(match: Match, slotSize: Int) {
+    writeMatchV298Layout(match, slotSize, includeInProgress = true)
 }
 
-fun BinaryWriter.writeMatchV334(match: Match) {
+fun BinaryWriter.writeMatchV334(match: Match, slotSize: Int) {
+    val slots = match.withMinimumSlotCount(slotSize).slots
+
     writeUByte(match.id)
     writeBoolean(match.inProgress)
     writeUByte(match.type.value)
@@ -35,6 +43,6 @@ fun BinaryWriter.writeMatchV334(match: Match) {
     writeString(match.beatmapText)
     writeInt(match.beatmapId)
     writeString(match.beatmapChecksum)
-    match.slots.forEach { writeUByte(it.status.bits) }
-    match.slots.filter { it.hasPlayer }.forEach { writeInt(it.userId) }
+    slots.forEach { writeUByte(it.status.bits) }
+    slots.filter { it.hasPlayer }.forEach { writeInt(it.userId) }
 }
