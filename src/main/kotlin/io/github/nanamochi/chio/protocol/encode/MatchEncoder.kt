@@ -2,14 +2,18 @@ package io.github.nanamochi.chio.protocol.encode
 
 import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.model.Match
+import io.github.nanamochi.chio.packet.model.MatchSlot
 import io.github.nanamochi.chio.packet.types.SlotStatus
+
+private fun Match.slotsForProtocol(slotSize: Int): List<MatchSlot> =
+    copy(slots = slots.take(slotSize)).withMinimumSlotCount(slotSize).slots
 
 private fun BinaryWriter.writeMatchV298Layout(
     match: Match,
     slotSize: Int,
     includeInProgress: Boolean,
 ) {
-    val slots = match.withMinimumSlotCount(slotSize).slots
+    val slots = match.slotsForProtocol(slotSize)
 
     writeUByte(match.id)
     if (includeInProgress) writeBoolean(match.inProgress)
@@ -33,7 +37,7 @@ fun BinaryWriter.writeMatchV312(match: Match, slotSize: Int) {
 }
 
 fun BinaryWriter.writeMatchV334(match: Match, slotSize: Int) {
-    val slots = match.withMinimumSlotCount(slotSize).slots
+    val slots = match.slotsForProtocol(slotSize)
 
     writeUByte(match.id)
     writeBoolean(match.inProgress)
