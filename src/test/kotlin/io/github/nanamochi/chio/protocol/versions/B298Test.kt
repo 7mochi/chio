@@ -1,6 +1,16 @@
 package io.github.nanamochi.chio.protocol.versions
 
+import io.github.nanamochi.chio.packet.inbound.LobbyJoinPacket as InboundLobbyJoinPacket
+import io.github.nanamochi.chio.packet.inbound.LobbyPartPacket as InboundLobbyPartPacket
+import io.github.nanamochi.chio.packet.inbound.MatchChangeSettingsPacket as InboundMatchChangeSettingsPacket
+import io.github.nanamochi.chio.packet.inbound.MatchChangeSlotPacket as InboundMatchChangeSlotPacket
+import io.github.nanamochi.chio.packet.inbound.MatchCreatePacket as InboundMatchCreatePacket
+import io.github.nanamochi.chio.packet.inbound.MatchJoinPacket as InboundMatchJoinPacket
+import io.github.nanamochi.chio.packet.inbound.MatchLockPacket as InboundMatchLockPacket
+import io.github.nanamochi.chio.packet.inbound.MatchPartPacket as InboundMatchPartPacket
+import io.github.nanamochi.chio.packet.inbound.MatchReadyPacket as InboundMatchReadyPacket
 import io.github.nanamochi.chio.packet.model.Match
+import io.github.nanamochi.chio.packet.model.MatchJoin
 import io.github.nanamochi.chio.packet.model.MatchSlot
 import io.github.nanamochi.chio.packet.outbound.FellowSpectatorJoinedPacket
 import io.github.nanamochi.chio.packet.outbound.FellowSpectatorLeftPacket
@@ -20,6 +30,8 @@ import io.github.nanamochi.chio.packet.types.SlotTeam
 import io.github.nanamochi.chio.packet.types.TeamType
 import io.github.nanamochi.chio.protocol.Protocols
 import io.github.nanamochi.chio.protocol.assertPacket
+import io.github.nanamochi.chio.protocol.hex
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 
 class B298Test {
@@ -96,7 +108,143 @@ class B298Test {
             protocol.encode(FellowSpectatorLeftPacket(5)),
         )
     }
+
+    @Test
+    fun `read lobby part`() {
+        assertEquals(
+            InboundLobbyPartPacket,
+            protocol.decode(hex("1e00140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read lobby join`() {
+        assertEquals(
+            InboundLobbyJoinPacket,
+            protocol.decode(hex("1f00140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read match part`() {
+        assertEquals(
+            InboundMatchPartPacket,
+            protocol.decode(hex("2200140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read match ready`() {
+        assertEquals(
+            InboundMatchReadyPacket,
+            protocol.decode(hex("2800140000001f8b08000000000002ff03000000000000000000")),
+        )
+    }
+
+    @Test
+    fun `read match join`() {
+        assertEquals(
+            InboundMatchJoinPacket(MatchJoin(matchId = 7)),
+            protocol.decode(hex("2100180000001f8b08000000000002ff636760600000a5e793bc04000000")),
+        )
+    }
+
+    @Test
+    fun `read match lock`() {
+        assertEquals(
+            InboundMatchLockPacket(5),
+            protocol.decode(hex("2900180000001f8b08000000000002ff6365606000002e2f9a1604000000")),
+        )
+    }
+
+    @Test
+    fun `read match change slot`() {
+        assertEquals(
+            InboundMatchChangeSlotPacket(3),
+            protocol.decode(hex("2700180000001f8b08000000000002ff636660600000f270f13304000000")),
+        )
+    }
+
+    @Test
+    fun `read match create`() {
+        assertEquals(
+            InboundMatchCreatePacket(inboundMatchV298()),
+            protocol.decode(
+                hex(
+                    "2000340000001f8b08000000000002ff6364e0e60a492d2e51c84d2c49cee0e606b375154014030830b2b130012966200600d556510d2b000000"
+                )
+            ),
+        )
+    }
+
+    @Test
+    fun `read match change settings`() {
+        assertEquals(
+            InboundMatchChangeSettingsPacket(inboundMatchV298()),
+            protocol.decode(
+                hex(
+                    "2a00340000001f8b08000000000002ff6364e0e60a492d2e51c84d2c49cee0e606b375154014030830b2b130012966200600d556510d2b000000"
+                )
+            ),
+        )
+    }
+
+    @Test
+    fun `match update with id over 255 is dropped`() {
+        assertEquals(0, protocol.encode(MatchUpdatePacket(matchOne().copy(id = 256))).size)
+    }
+
+    @Test
+    fun `match with extra slots is truncated to the protocol slot size`() {
+        protocol.assertPacket(
+            "1b002f0000001f8b08000000000002ff6364e0e60a492d2e51c84d2c49cee0e606b3751540140308fc67600000578be83123000000",
+            protocol.encode(MatchUpdatePacket(matchWithExtraSlotsV298())),
+        )
+    }
 }
+
+private fun inboundMatchV298(): Match =
+    Match(
+            id = 1,
+            inProgress = false,
+            type = MatchType.Standard,
+            name = "Test match",
+            beatmapText = "Test - Test",
+            beatmapId = 0,
+            beatmapChecksum = "",
+            slots =
+                listOf(
+                    MatchSlot(-1, SlotStatus.Open),
+                    MatchSlot(2, SlotStatus.NotReady),
+                    MatchSlot(3, SlotStatus.Ready),
+                ),
+            hostId = -1,
+            mode = Mode.Osu,
+            scoringType = ScoringType.Score,
+            teamType = TeamType.HeadToHead,
+            freemod = false,
+            seed = 0,
+        )
+        .withMinimumSlotCount(8)
+
+private fun matchWithExtraSlotsV298(): Match =
+    Match(
+        id = 1,
+        inProgress = false,
+        type = MatchType.Standard,
+        name = "Test match",
+        beatmapText = "Test - Test",
+        beatmapId = 0,
+        beatmapChecksum = "",
+        slots =
+            List(8) { MatchSlot(it + 1, SlotStatus.Open) } + MatchSlot(99, SlotStatus.HasPlayer),
+        hostId = -1,
+        mode = Mode.Osu,
+        scoringType = ScoringType.Score,
+        teamType = TeamType.HeadToHead,
+        freemod = false,
+        seed = 0,
+    )
 
 internal fun matchOne(): Match =
     Match(
