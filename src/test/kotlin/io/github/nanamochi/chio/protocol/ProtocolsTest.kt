@@ -17,6 +17,6 @@ class ProtocolsTest {
     @Test
     fun `select clamps builds outside the supported range`() {
         assertEquals(282, Protocols.select(1).version)
-        assertEquals(425, Protocols.select(999).version)
+        assertEquals(452, Protocols.select(999).version)
     }
 }

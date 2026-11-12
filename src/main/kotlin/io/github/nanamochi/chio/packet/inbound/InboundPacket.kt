@@ -78,3 +78,7 @@ data class ChannelJoinPacket(val channel: String) : InboundPacket
 data class BeatmapInfoRequestPacket(val filenames: List<String>) : InboundPacket
 
 data class MatchTransferHostRequestPacket(val hostId: Int) : InboundPacket
+
+data class FriendsAddPacket(val userId: Int) : InboundPacket
+
+data class FriendsRemovePacket(val userId: Int) : InboundPacket

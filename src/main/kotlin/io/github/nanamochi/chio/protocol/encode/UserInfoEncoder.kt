@@ -15,6 +15,16 @@ import io.github.nanamochi.chio.packet.types.QuitState
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.Protocol
 
+/** Clients from b365 onward crash when a user's total score exceeds this value. */
+private const val MAX_TOTAL_SCORE = 17_705_429_348L
+
+internal fun UserInfo.cappedTotalScore(): UserInfo =
+    if (stats.totalScore <= MAX_TOTAL_SCORE) {
+        this
+    } else {
+        copy(stats = stats.copy(totalScore = MAX_TOTAL_SCORE))
+    }
+
 private fun Protocol.encodedIrcJoin(name: String): List<EncodedPacket> =
     encodedPackets(IrcJoinPacket(name)).orEmpty()
 
@@ -100,16 +110,34 @@ fun encodeUserPresenceV323(protocol: Protocol, packet: UserPresencePacket): List
         protocol.encodedPackets(withoutStats).orEmpty()
 }
 
+private fun BinaryWriter.writeUserPresenceV338Layout(
+    info: UserInfo,
+    includePermissions: Boolean,
+) {
+    writeUserStatsBodyV338(info, Completeness.Full)
+    writeString(info.name)
+    writeString(info.avatarFilename)
+    writeUByte(info.presence.timezone + 24)
+    writeString(info.presence.countryString)
+    if (includePermissions) writeUByte(info.presence.permissions.bits)
+}
+
 fun encodeUserPresenceV338(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> {
     val info = packet.info
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
 
     val writer = BinaryWriter()
-    writer.writeUserStatsBodyV338(info, Completeness.Full)
-    writer.writeString(info.name)
-    writer.writeString(info.avatarFilename)
-    writer.writeUByte(info.presence.timezone + 24)
-    writer.writeString(info.presence.countryString)
+    writer.writeUserPresenceV338Layout(info, includePermissions = false)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
+}
+
+fun encodeUserPresenceV452(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> {
+    val info = packet.info.cappedTotalScore()
+    if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
+
+    val writer = BinaryWriter()
+    writer.writeUserPresenceV338Layout(info, includePermissions = true)
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
 }
