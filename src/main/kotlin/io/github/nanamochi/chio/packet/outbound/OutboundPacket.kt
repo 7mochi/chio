@@ -8,11 +8,14 @@ import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
 import io.github.nanamochi.chio.packet.model.ScoreFrame
 import io.github.nanamochi.chio.packet.model.UserInfo
 import io.github.nanamochi.chio.packet.model.UserQuit
+import io.github.nanamochi.chio.packet.types.Permissions
 
 /** Messages a server sends to an osu! client. */
 sealed interface OutboundPacket
 
 data class LoginReplyPacket(val reply: Int) : OutboundPacket
+
+data class LoginPermissionsPacket(val permissions: Permissions) : OutboundPacket
 
 data object PingPacket : OutboundPacket
 
