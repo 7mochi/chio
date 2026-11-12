@@ -5,6 +5,7 @@ import io.github.nanamochi.chio.packet.inbound.BeatmapInfoRequestPacket
 import io.github.nanamochi.chio.packet.model.BeatmapInfo
 import io.github.nanamochi.chio.packet.outbound.BeatmapInfoReplyPacket
 import io.github.nanamochi.chio.packet.types.Rank
+import io.github.nanamochi.chio.packet.types.RankedStatus
 import io.github.nanamochi.chio.protocol.Protocols
 import io.github.nanamochi.chio.protocol.assertPacket
 import io.github.nanamochi.chio.protocol.hex
@@ -27,7 +28,7 @@ class B354Test {
                             beatmapId = 1234567,
                             beatmapSetId = 7654321,
                             threadId = 42,
-                            isRanked = true,
+                            rankedStatus = RankedStatus.Ranked,
                             osuRank = Rank.A,
                             checksum = "checksum",
                         ),
@@ -36,7 +37,7 @@ class B354Test {
                             beatmapId = -1,
                             beatmapSetId = 0,
                             threadId = -1,
-                            isRanked = false,
+                            rankedStatus = RankedStatus.Pending,
                             osuRank = Rank.N,
                             checksum = "",
                         ),
