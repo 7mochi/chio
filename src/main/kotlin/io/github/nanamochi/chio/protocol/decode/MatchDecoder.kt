@@ -55,7 +55,17 @@ fun readMatchV312(reader: BinaryReader, slotSize: Int): Match {
     return readMatchV298Layout(reader, slotSize, id, inProgress)
 }
 
-fun readMatchV334(reader: BinaryReader, slotSize: Int): Match {
+fun readMatchV334(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(reader, slotSize, includeHost = false)
+
+fun readMatchV402(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(reader, slotSize, includeHost = true)
+
+private fun readMatchV334Layout(
+    reader: BinaryReader,
+    slotSize: Int,
+    includeHost: Boolean,
+): Match {
     val id = reader.readUByte()
     val inProgress = reader.readBoolean()
     val type = MatchType.from(reader.readUByte())
@@ -67,6 +77,7 @@ fun readMatchV334(reader: BinaryReader, slotSize: Int): Match {
 
     val statuses = List(slotSize) { SlotStatus(reader.readUByte()) }
     val slots = statuses.map { reader.readMatchSlot(it) }
+    val hostId = if (includeHost) reader.readInt() else -1
 
     return Match(
         id = id,
@@ -78,6 +89,7 @@ fun readMatchV334(reader: BinaryReader, slotSize: Int): Match {
         beatmapId = beatmapId,
         beatmapChecksum = beatmapChecksum,
         slots = slots,
+        hostId = hostId,
     )
 }
 
