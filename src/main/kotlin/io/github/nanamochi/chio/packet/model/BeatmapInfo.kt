@@ -13,6 +13,8 @@ constructor(
     val rankedStatus: RankedStatus = RankedStatus.NotSubmitted,
     val osuRank: Rank = Rank.N,
     val checksum: String = "",
+    val fruitsRank: Rank = Rank.N,
+    val taikoRank: Rank = Rank.N,
 ) {
     val isRanked: Boolean
         get() = rankedStatus.isRanked

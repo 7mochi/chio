@@ -15,14 +15,17 @@ import io.github.nanamochi.chio.packet.types.QuitState
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.Protocol
 
-/** Clients from b365 onward crash when a user's total score exceeds this value. */
-private const val MAX_TOTAL_SCORE = 17_705_429_348L
+/** b365 to b490 clients crash when a user's total score exceeds this value. */
+private const val MAX_TOTAL_SCORE_V365 = 17_705_429_348L
 
-internal fun UserInfo.cappedTotalScore(): UserInfo =
-    if (stats.totalScore <= MAX_TOTAL_SCORE) {
+/** b504 and later clients crash when a user's total score exceeds this higher value. */
+private const val MAX_TOTAL_SCORE_V504 = 26_931_190_827L
+
+internal fun UserInfo.cappedTotalScore(maxTotalScore: Long = MAX_TOTAL_SCORE_V365): UserInfo =
+    if (stats.totalScore <= maxTotalScore) {
         this
     } else {
-        copy(stats = stats.copy(totalScore = MAX_TOTAL_SCORE))
+        copy(stats = stats.copy(totalScore = maxTotalScore))
     }
 
 private fun Protocol.encodedIrcJoin(name: String): List<EncodedPacket> =
@@ -125,13 +128,23 @@ fun encodeUserStatsV489(protocol: Protocol, packet: UserStatsPacket): List<Encod
         includeStatusMode = true,
     )
 
-fun encodeUserStatsV490(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+private fun encodeUserStatsV490Layout(
+    protocol: Protocol,
+    packet: UserStatsPacket,
+    maxTotalScore: Long,
+): List<EncodedPacket> =
     encodeUserStatsV338Layout(
         protocol,
-        packet.copy(info = packet.info.cappedTotalScore()),
+        packet.copy(info = packet.info.cappedTotalScore(maxTotalScore)),
         includeStatusMode = true,
         includeStatusBeatmapId = true,
     )
+
+fun encodeUserStatsV490(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+    encodeUserStatsV490Layout(protocol, packet, MAX_TOTAL_SCORE_V365)
+
+fun encodeUserStatsV504(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+    encodeUserStatsV490Layout(protocol, packet, MAX_TOTAL_SCORE_V504)
 
 fun encodeUserPresenceV282(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
     protocol.encodedPackets(UserStatsPacket(packet.info)).orEmpty()
@@ -200,8 +213,12 @@ fun encodeUserPresenceV489(protocol: Protocol, packet: UserPresencePacket): List
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
 }
 
-fun encodeUserPresenceV490(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> {
-    val info = packet.info.cappedTotalScore()
+private fun encodeUserPresenceV490Layout(
+    protocol: Protocol,
+    packet: UserPresencePacket,
+    maxTotalScore: Long,
+): List<EncodedPacket> {
+    val info = packet.info.cappedTotalScore(maxTotalScore)
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
 
     val writer = BinaryWriter()
@@ -214,6 +231,12 @@ fun encodeUserPresenceV490(protocol: Protocol, packet: UserPresencePacket): List
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
 }
+
+fun encodeUserPresenceV490(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV490Layout(protocol, packet, MAX_TOTAL_SCORE_V365)
+
+fun encodeUserPresenceV504(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV490Layout(protocol, packet, MAX_TOTAL_SCORE_V504)
 
 fun encodeUserPresenceSingle(
     protocol: Protocol,
