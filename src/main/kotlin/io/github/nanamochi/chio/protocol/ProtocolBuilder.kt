@@ -21,6 +21,7 @@ fun Protocol.derive(version: Int, block: ProtocolBuilder.() -> Unit): Protocol =
 /** Mutable configuration for [protocol] and [derive]. [build] copies the current values. */
 @ProtocolDsl
 class ProtocolBuilder @JvmOverloads internal constructor(val version: Int, base: Protocol? = null) {
+    var protocolVersion: Int = base?.protocolVersion ?: 0
     var format: PacketFormat = base?.format ?: LegacyPacketFormat
     var idMapping: PacketIdMapping = base?.idMapping ?: PacketIdMappingV282
     var slotSize: Int = base?.slotSize ?: 8
@@ -111,6 +112,7 @@ class ProtocolBuilder @JvmOverloads internal constructor(val version: Int, base:
     fun build(): Protocol =
         Protocol(
             version = version,
+            protocolVersion = protocolVersion,
             format = format,
             idMapping = idMapping,
             slotSize = slotSize,

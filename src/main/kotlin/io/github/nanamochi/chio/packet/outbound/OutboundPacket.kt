@@ -17,7 +17,13 @@ data class LoginReplyPacket(val reply: Int) : OutboundPacket
 
 data class LoginPermissionsPacket(val permissions: Permissions) : OutboundPacket
 
-data class ProtocolNegotiationPacket(val version: Int = 0) : OutboundPacket
+/**
+ * Negotiates a Bancho protocol version.
+ *
+ * [version] is the version to request, or `null` to use the protocol's default.
+ */
+data class ProtocolNegotiationPacket @JvmOverloads constructor(val version: Int? = null) :
+    OutboundPacket
 
 data class FriendsListPacket(val friends: List<Int>) : OutboundPacket
 

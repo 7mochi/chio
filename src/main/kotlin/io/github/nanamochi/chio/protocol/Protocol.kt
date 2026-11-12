@@ -43,6 +43,8 @@ fun interface PacketEncoder<in P : OutboundPacket> {
 class Protocol
 internal constructor(
     val version: Int,
+    /** The Bancho protocol version negotiated with the client. */
+    val protocolVersion: Int,
     val format: PacketFormat,
     val idMapping: PacketIdMapping,
     val slotSize: Int,

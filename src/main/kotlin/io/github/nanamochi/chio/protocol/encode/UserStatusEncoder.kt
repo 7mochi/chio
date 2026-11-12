@@ -28,3 +28,8 @@ fun BinaryWriter.writeStatusV338(status: UserStatus) {
     writeString(status.beatmapChecksum)
     writeUShort(status.mods.bits)
 }
+
+fun BinaryWriter.writeStatusV489(status: UserStatus) {
+    writeStatusV338(status)
+    writeUByte(status.mode.value)
+}
