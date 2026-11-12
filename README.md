@@ -114,6 +114,19 @@ just lint
 just clean
 ```
 
+### Nix
+
+```bash
+nix develop
+nix build
+```
+
+`nix build` writes the JAR to `result/share/java/`. The dev shell has JDK 25 and
+`just`. Run `direnv allow` to load it from `.envrc`.
+
+Update `nix/packages/chio/deps.json` with
+`nix build .#chio.mitmCache.updateScript && ./result`.
+
 ## Thanks to
 
 - [Levi](https://github.com/Lekuruu) for creating and maintaining

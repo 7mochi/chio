@@ -1,0 +1,11 @@
+gradle.projectsLoaded {
+  rootProject.allprojects { project ->
+    project.tasks.register("nixDownloadDeps") {
+      def projectRef = project
+      doLast {
+        projectRef.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+        projectRef.buildscript.configurations.findAll { it.canBeResolved }.each { it.resolve() }
+      }
+    }
+  }
+}
