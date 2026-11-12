@@ -46,10 +46,15 @@ private fun BinaryWriter.writeUserStatsBodyV338(
     info: UserInfo,
     completeness: Completeness,
     includeStatusMode: Boolean = false,
+    includeStatusBeatmapId: Boolean = false,
 ) {
     writeUInt(info.id)
     writeUByte(completeness.value)
-    if (includeStatusMode) writeStatusV489(info.status) else writeStatusV338(info.status)
+    when {
+        includeStatusBeatmapId -> writeStatusV490(info.status)
+        includeStatusMode -> writeStatusV489(info.status)
+        else -> writeStatusV338(info.status)
+    }
     writeULong(info.stats.rankedScore)
     writeFloat(info.stats.accuracy)
     writeUInt(info.stats.playcount)
@@ -94,12 +99,18 @@ private fun encodeUserStatsV338Layout(
     protocol: Protocol,
     packet: UserStatsPacket,
     includeStatusMode: Boolean,
+    includeStatusBeatmapId: Boolean = false,
 ): List<EncodedPacket> {
     val info = packet.info
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
 
     val writer = BinaryWriter()
-    writer.writeUserStatsBodyV338(info, Completeness.Statistics, includeStatusMode)
+    writer.writeUserStatsBodyV338(
+        info,
+        Completeness.Statistics,
+        includeStatusMode,
+        includeStatusBeatmapId,
+    )
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
 }
@@ -112,6 +123,14 @@ fun encodeUserStatsV489(protocol: Protocol, packet: UserStatsPacket): List<Encod
         protocol,
         packet.copy(info = packet.info.cappedTotalScore()),
         includeStatusMode = true,
+    )
+
+fun encodeUserStatsV490(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+    encodeUserStatsV338Layout(
+        protocol,
+        packet.copy(info = packet.info.cappedTotalScore()),
+        includeStatusMode = true,
+        includeStatusBeatmapId = true,
     )
 
 fun encodeUserPresenceV282(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
@@ -132,8 +151,14 @@ private fun BinaryWriter.writeUserPresenceV338Layout(
     info: UserInfo,
     includePermissions: Boolean,
     includeStatusMode: Boolean = false,
+    includeStatusBeatmapId: Boolean = false,
 ) {
-    writeUserStatsBodyV338(info, Completeness.Full, includeStatusMode)
+    writeUserStatsBodyV338(
+        info,
+        Completeness.Full,
+        includeStatusMode,
+        includeStatusBeatmapId,
+    )
     writeString(info.name)
     writeString(info.avatarFilename)
     writeUByte(info.presence.timezone + 24)
@@ -170,6 +195,21 @@ fun encodeUserPresenceV489(protocol: Protocol, packet: UserPresencePacket): List
         info,
         includePermissions = true,
         includeStatusMode = true,
+    )
+
+    return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
+}
+
+fun encodeUserPresenceV490(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> {
+    val info = packet.info.cappedTotalScore()
+    if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
+
+    val writer = BinaryWriter()
+    writer.writeUserPresenceV338Layout(
+        info,
+        includePermissions = true,
+        includeStatusMode = true,
+        includeStatusBeatmapId = true,
     )
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))

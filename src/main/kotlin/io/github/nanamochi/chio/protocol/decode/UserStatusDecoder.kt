@@ -39,18 +39,27 @@ fun readUserStatusV338(reader: BinaryReader): UserStatus =
 fun readUserStatusV489(reader: BinaryReader): UserStatus =
     readUserStatusV338Layout(reader, includeMode = true)
 
-private fun readUserStatusV338Layout(reader: BinaryReader, includeMode: Boolean): UserStatus {
+fun readUserStatusV490(reader: BinaryReader): UserStatus =
+    readUserStatusV338Layout(reader, includeMode = true, includeBeatmapId = true)
+
+private fun readUserStatusV338Layout(
+    reader: BinaryReader,
+    includeMode: Boolean,
+    includeBeatmapId: Boolean = false,
+): UserStatus {
     var action = Status.from(reader.readUByte())
     var text = ""
     var checksum = ""
     var mods = Mods.NoMod
     var mode = Mode.Osu
+    var beatmapId = -1
 
     if (reader.readBoolean()) {
         text = reader.readString()
         checksum = reader.readString()
         mods = Mods.fromBits(reader.readUShort())
         if (includeMode) mode = Mode.from(reader.readUByte())
+        if (includeBeatmapId) beatmapId = reader.readInt()
     }
 
     if (action == Status.Idle && checksum.isNotEmpty()) {
@@ -63,5 +72,6 @@ private fun readUserStatusV338Layout(reader: BinaryReader, includeMode: Boolean)
         mods = mods,
         mode = mode,
         beatmapChecksum = checksum,
+        beatmapId = beatmapId,
     )
 }

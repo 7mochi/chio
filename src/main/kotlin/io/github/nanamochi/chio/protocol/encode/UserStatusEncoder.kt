@@ -33,3 +33,8 @@ fun BinaryWriter.writeStatusV489(status: UserStatus) {
     writeStatusV338(status)
     writeUByte(status.mode.value)
 }
+
+fun BinaryWriter.writeStatusV490(status: UserStatus) {
+    writeStatusV489(status)
+    writeInt(status.beatmapId)
+}
