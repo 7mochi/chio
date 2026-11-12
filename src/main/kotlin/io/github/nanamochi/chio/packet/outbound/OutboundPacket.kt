@@ -17,6 +17,8 @@ data class LoginReplyPacket(val reply: Int) : OutboundPacket
 
 data class LoginPermissionsPacket(val permissions: Permissions) : OutboundPacket
 
+data class ProtocolNegotiationPacket(val version: Int = 0) : OutboundPacket
+
 data class FriendsListPacket(val friends: List<Int>) : OutboundPacket
 
 data object PingPacket : OutboundPacket
