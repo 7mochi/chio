@@ -1,5 +1,6 @@
 package io.github.nanamochi.chio.packet.outbound
 
+import io.github.nanamochi.chio.packet.model.BeatmapInfo
 import io.github.nanamochi.chio.packet.model.Channel
 import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.model.Message
@@ -90,3 +91,5 @@ data class ChannelAvailablePacket(val channel: Channel) : OutboundPacket
 data class ChannelRevokedPacket(val channel: String) : OutboundPacket
 
 data class ChannelAvailableAutojoinPacket(val channel: Channel) : OutboundPacket
+
+data class BeatmapInfoReplyPacket(val beatmaps: List<BeatmapInfo>) : OutboundPacket

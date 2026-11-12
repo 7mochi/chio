@@ -74,3 +74,5 @@ data object MatchSkipRequestPacket : InboundPacket
 data class MatchChangeBeatmapPacket(val match: Match) : InboundPacket
 
 data class ChannelJoinPacket(val channel: String) : InboundPacket
+
+data class BeatmapInfoRequestPacket(val filenames: List<String>) : InboundPacket
