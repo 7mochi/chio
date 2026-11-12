@@ -1,11 +1,17 @@
 package io.github.nanamochi.chio.protocol.versions
 
+import io.github.nanamochi.chio.packet.inbound.MatchChangeBeatmapPacket as InboundMatchChangeBeatmapPacket
+import io.github.nanamochi.chio.packet.model.Match
+import io.github.nanamochi.chio.packet.model.MatchSlot
 import io.github.nanamochi.chio.packet.model.testStatus
 import io.github.nanamochi.chio.packet.model.testUserInfo
 import io.github.nanamochi.chio.packet.outbound.UserPresencePacket
 import io.github.nanamochi.chio.packet.outbound.UserStatsPacket
+import io.github.nanamochi.chio.packet.types.SlotStatus
 import io.github.nanamochi.chio.protocol.Protocols
 import io.github.nanamochi.chio.protocol.assertPacket
+import io.github.nanamochi.chio.protocol.hex
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 
 class B323Test {
@@ -46,4 +52,33 @@ class B323Test {
             ),
         )
     }
+
+    @Test
+    fun `read match change beatmap`() {
+        assertEquals(
+            InboundMatchChangeBeatmapPacket(inboundMatchV312()),
+            protocol.decode(
+                hex(
+                    "3200350000001f8b08000000000002ff636664e0e60a492d2e51c84d2c49cee0e606b375154014030830b2b1300129662006005ed384082c000000"
+                )
+            ),
+        )
+    }
 }
+
+private fun inboundMatchV312(): Match =
+    Match(
+            id = 3,
+            inProgress = true,
+            name = "Test match",
+            beatmapText = "Test - Test",
+            beatmapId = 0,
+            beatmapChecksum = "",
+            slots =
+                listOf(
+                    MatchSlot(-1, SlotStatus.Open),
+                    MatchSlot(2, SlotStatus.NotReady),
+                    MatchSlot(3, SlotStatus.Ready),
+                ),
+        )
+        .withMinimumSlotCount(8)
