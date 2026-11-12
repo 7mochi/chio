@@ -1,3 +1,4 @@
+import com.diffplug.spotless.LineEnding
 import com.diffplug.spotless.kotlin.KtfmtStep
 
 plugins {
@@ -34,6 +35,11 @@ tasks.test {
 }
 
 spotless {
+    // Pin LF so Spotless does not search for .gitattributes.
+    // The search invalidates the configuration cache
+    // https://github.com/gradle/gradle/issues/25469#issuecomment-3444231151
+    lineEndings = LineEnding.UNIX
+
     format("misc") {
         target(".gitignore", ".gitattributes", "*.md")
         leadingTabsToSpaces(4)
