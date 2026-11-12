@@ -69,4 +69,6 @@ data object MatchFailedPacket : InboundPacket
 
 data object MatchHasBeatmapPacket : InboundPacket
 
+data object MatchSkipRequestPacket : InboundPacket
+
 data class MatchChangeBeatmapPacket(val match: Match) : InboundPacket

@@ -79,3 +79,5 @@ data object MatchAllPlayersLoadedPacket : OutboundPacket
 data class MatchPlayerFailedPacket(val userId: Int) : OutboundPacket
 
 data object MatchCompletePacket : OutboundPacket
+
+data object MatchSkipPacket : OutboundPacket

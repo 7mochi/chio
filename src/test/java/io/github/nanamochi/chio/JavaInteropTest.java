@@ -61,7 +61,7 @@ class JavaInteropTest {
     void publicApiConveniencesWork() {
         Protocol protocol = Protocols.select(282);
 
-        assertEquals(340, Protocols.getLatest().getVersion());
+        assertEquals(342, Protocols.getLatest().getVersion());
         assertEquals(282, Protocols.getInitial().getVersion());
         assertTrue(Protocols.getVersions().contains(340));
 
