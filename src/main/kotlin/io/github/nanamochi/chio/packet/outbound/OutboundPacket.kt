@@ -1,5 +1,6 @@
 package io.github.nanamochi.chio.packet.outbound
 
+import io.github.nanamochi.chio.packet.model.Channel
 import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.model.Message
 import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
@@ -81,3 +82,11 @@ data class MatchPlayerFailedPacket(val userId: Int) : OutboundPacket
 data object MatchCompletePacket : OutboundPacket
 
 data object MatchSkipPacket : OutboundPacket
+
+data class ChannelJoinSuccessPacket(val channel: String) : OutboundPacket
+
+data class ChannelAvailablePacket(val channel: Channel) : OutboundPacket
+
+data class ChannelRevokedPacket(val channel: String) : OutboundPacket
+
+data class ChannelAvailableAutojoinPacket(val channel: Channel) : OutboundPacket
