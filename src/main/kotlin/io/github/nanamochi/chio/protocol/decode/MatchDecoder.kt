@@ -4,6 +4,7 @@ import io.github.nanamochi.chio.binary.BinaryReader
 import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.model.MatchSlot
 import io.github.nanamochi.chio.packet.types.MatchType
+import io.github.nanamochi.chio.packet.types.Mode
 import io.github.nanamochi.chio.packet.types.Mods
 import io.github.nanamochi.chio.packet.types.SlotStatus
 
@@ -61,10 +62,14 @@ fun readMatchV334(reader: BinaryReader, slotSize: Int): Match =
 fun readMatchV402(reader: BinaryReader, slotSize: Int): Match =
     readMatchV334Layout(reader, slotSize, includeHost = true)
 
+fun readMatchV470(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(reader, slotSize, includeHost = true, includeMode = true)
+
 private fun readMatchV334Layout(
     reader: BinaryReader,
     slotSize: Int,
     includeHost: Boolean,
+    includeMode: Boolean = false,
 ): Match {
     val id = reader.readUByte()
     val inProgress = reader.readBoolean()
@@ -78,6 +83,7 @@ private fun readMatchV334Layout(
     val statuses = List(slotSize) { SlotStatus(reader.readUByte()) }
     val slots = statuses.map { reader.readMatchSlot(it) }
     val hostId = if (includeHost) reader.readInt() else -1
+    val mode = if (includeMode) Mode.from(reader.readUByte()) else Mode.Osu
 
     return Match(
         id = id,
@@ -90,6 +96,7 @@ private fun readMatchV334Layout(
         beatmapChecksum = beatmapChecksum,
         slots = slots,
         hostId = hostId,
+        mode = mode,
     )
 }
 
