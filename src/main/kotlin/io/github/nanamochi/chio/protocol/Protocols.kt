@@ -15,6 +15,7 @@ import io.github.nanamochi.chio.protocol.versions.B342
 import io.github.nanamochi.chio.protocol.versions.B349
 import io.github.nanamochi.chio.protocol.versions.B354
 import io.github.nanamochi.chio.protocol.versions.B365
+import io.github.nanamochi.chio.protocol.versions.B374
 import java.util.NavigableMap
 import java.util.TreeMap
 
@@ -37,6 +38,7 @@ object Protocols {
             put(349, B349)
             put(354, B354)
             put(365, B365)
+            put(374, B374)
         }
 
     @JvmStatic
