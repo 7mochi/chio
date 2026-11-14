@@ -88,12 +88,25 @@ fun readMatchV558(reader: BinaryReader, slotSize: Int): Match =
         optionalScoringAndTeam = false,
     )
 
+fun readMatchV591(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(
+        reader,
+        slotSize,
+        includeHost = true,
+        includeMode = true,
+        includeSlotTeams = true,
+        includePassword = true,
+        includeScoringAndTeam = true,
+        optionalScoringAndTeam = false,
+    )
+
 private fun readMatchV334Layout(
     reader: BinaryReader,
     slotSize: Int,
     includeHost: Boolean,
     includeMode: Boolean = false,
     includeSlotTeams: Boolean = false,
+    includePassword: Boolean = false,
     includeScoringAndTeam: Boolean = false,
     optionalScoringAndTeam: Boolean = true,
 ): Match {
@@ -102,6 +115,7 @@ private fun readMatchV334Layout(
     val type = MatchType.from(reader.readUByte())
     val mods = Mods.fromBits(reader.readUShort())
     val name = reader.readString()
+    val password = if (includePassword) reader.readString() else ""
     val beatmapText = reader.readString()
     val beatmapId = reader.readInt()
     val beatmapChecksum = reader.readString()
@@ -133,6 +147,7 @@ private fun readMatchV334Layout(
         type = type,
         mods = mods,
         name = name,
+        password = password,
         beatmapText = beatmapText,
         beatmapId = beatmapId,
         beatmapChecksum = beatmapChecksum,
