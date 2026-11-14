@@ -2,7 +2,9 @@ package io.github.nanamochi.chio.packet.model
 
 import java.security.MessageDigest
 
-data class ScoreFrame(
+data class ScoreFrame
+@JvmOverloads
+constructor(
     val time: Int,
     val id: Int,
     val total300: Int,
@@ -16,6 +18,8 @@ data class ScoreFrame(
     val currentCombo: Int,
     val perfect: Boolean,
     val hp: Int,
+    /** Protocol-specific tag byte used by newer clients. */
+    val tagByte: Int = 0,
 ) {
     val passed: Boolean
         get() = hp != 254

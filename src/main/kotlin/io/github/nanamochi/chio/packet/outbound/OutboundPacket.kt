@@ -97,6 +97,8 @@ data object MatchCompletePacket : OutboundPacket
 
 data object MatchSkipPacket : OutboundPacket
 
+data object TitleUpdatePacket : OutboundPacket
+
 data class ChannelJoinSuccessPacket(val channel: String) : OutboundPacket
 
 data class ChannelAvailablePacket(val channel: Channel) : OutboundPacket

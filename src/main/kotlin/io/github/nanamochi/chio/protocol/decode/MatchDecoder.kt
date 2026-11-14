@@ -6,7 +6,9 @@ import io.github.nanamochi.chio.packet.model.MatchSlot
 import io.github.nanamochi.chio.packet.types.MatchType
 import io.github.nanamochi.chio.packet.types.Mode
 import io.github.nanamochi.chio.packet.types.Mods
+import io.github.nanamochi.chio.packet.types.ScoringType
 import io.github.nanamochi.chio.packet.types.SlotStatus
+import io.github.nanamochi.chio.packet.types.TeamType
 
 private fun readMatchV298Layout(
     reader: BinaryReader,
@@ -65,11 +67,21 @@ fun readMatchV402(reader: BinaryReader, slotSize: Int): Match =
 fun readMatchV470(reader: BinaryReader, slotSize: Int): Match =
     readMatchV334Layout(reader, slotSize, includeHost = true, includeMode = true)
 
+fun readMatchV535(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(
+        reader,
+        slotSize,
+        includeHost = true,
+        includeMode = true,
+        includeScoringAndTeam = true,
+    )
+
 private fun readMatchV334Layout(
     reader: BinaryReader,
     slotSize: Int,
     includeHost: Boolean,
     includeMode: Boolean = false,
+    includeScoringAndTeam: Boolean = false,
 ): Match {
     val id = reader.readUByte()
     val inProgress = reader.readBoolean()
@@ -84,6 +96,12 @@ private fun readMatchV334Layout(
     val slots = statuses.map { reader.readMatchSlot(it) }
     val hostId = if (includeHost) reader.readInt() else -1
     val mode = if (includeMode) Mode.from(reader.readUByte()) else Mode.Osu
+    var scoringType = ScoringType.Score
+    var teamType = TeamType.HeadToHead
+    if (includeScoringAndTeam) {
+        if (reader.hasRemaining()) scoringType = ScoringType.from(reader.readUByte())
+        if (reader.hasRemaining()) teamType = TeamType.from(reader.readUByte())
+    }
 
     return Match(
         id = id,
@@ -97,6 +115,8 @@ private fun readMatchV334Layout(
         slots = slots,
         hostId = hostId,
         mode = mode,
+        scoringType = scoringType,
+        teamType = teamType,
     )
 }
 

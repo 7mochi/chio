@@ -33,3 +33,9 @@ fun BinaryWriter.writeScoreFrameV334(frame: ScoreFrame) {
     writeInt(frame.time)
     writeScoreFrameBody(frame)
 }
+
+fun BinaryWriter.writeScoreFrameV535(frame: ScoreFrame) {
+    writeInt(frame.time)
+    writeScoreFrameBody(frame)
+    writeUByte(frame.tagByte)
+}
