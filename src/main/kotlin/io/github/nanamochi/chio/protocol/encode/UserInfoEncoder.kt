@@ -184,6 +184,7 @@ private fun BinaryWriter.writeUserPresenceV338Layout(
     includeStatusMode: Boolean = false,
     includeStatusBeatmapId: Boolean = false,
     rankAsS32: Boolean = false,
+    includeLocation: Boolean = false,
 ) {
     writeUserStatsBodyV338(
         info,
@@ -197,6 +198,10 @@ private fun BinaryWriter.writeUserPresenceV338Layout(
     writeUByte(info.presence.timezone + 24)
     writeString(info.presence.countryString)
     if (includePermissions) writeUByte(info.presence.permissions.bits)
+    if (includeLocation) {
+        writeFloat(info.presence.longitude.toFloat())
+        writeFloat(info.presence.latitude.toFloat())
+    }
 }
 
 fun encodeUserPresenceV338(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> {
@@ -238,6 +243,7 @@ private fun encodeUserPresenceV490Layout(
     packet: UserPresencePacket,
     maxTotalScore: Long?,
     rankAsS32: Boolean = false,
+    includeLocation: Boolean = false,
 ): List<EncodedPacket> {
     val info = packet.info.cappedTotalScore(maxTotalScore)
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
@@ -249,6 +255,7 @@ private fun encodeUserPresenceV490Layout(
         includeStatusMode = true,
         includeStatusBeatmapId = true,
         rankAsS32 = rankAsS32,
+        includeLocation = includeLocation,
     )
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
@@ -269,6 +276,18 @@ fun encodeUserPresenceV695(protocol: Protocol, packet: UserPresencePacket): List
         packet,
         maxTotalScore = null,
         rankAsS32 = true,
+    )
+
+fun encodeUserPresenceV1183(
+    protocol: Protocol,
+    packet: UserPresencePacket,
+): List<EncodedPacket> =
+    encodeUserPresenceV490Layout(
+        protocol,
+        packet,
+        maxTotalScore = null,
+        rankAsS32 = true,
+        includeLocation = true,
     )
 
 fun encodeUserPresenceSingle(
