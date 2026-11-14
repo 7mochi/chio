@@ -52,6 +52,7 @@ private fun BinaryWriter.writeUserStatsBodyV338(
     completeness: Completeness,
     includeStatusMode: Boolean = false,
     includeStatusBeatmapId: Boolean = false,
+    rankAsS32: Boolean = false,
 ) {
     writeUInt(info.id)
     writeUByte(completeness.value)
@@ -64,7 +65,7 @@ private fun BinaryWriter.writeUserStatsBodyV338(
     writeFloat(info.stats.accuracy)
     writeUInt(info.stats.playcount)
     writeULong(info.stats.totalScore)
-    writeUShort(info.stats.rank)
+    if (rankAsS32) writeInt(info.stats.rank) else writeUShort(info.stats.rank)
 }
 
 fun encodeUserStatsV282(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> {
@@ -105,6 +106,7 @@ private fun encodeUserStatsV338Layout(
     packet: UserStatsPacket,
     includeStatusMode: Boolean,
     includeStatusBeatmapId: Boolean = false,
+    rankAsS32: Boolean = false,
 ): List<EncodedPacket> {
     val info = packet.info
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
@@ -113,8 +115,9 @@ private fun encodeUserStatsV338Layout(
     writer.writeUserStatsBodyV338(
         info,
         Completeness.Statistics,
-        includeStatusMode,
-        includeStatusBeatmapId,
+        includeStatusMode = includeStatusMode,
+        includeStatusBeatmapId = includeStatusBeatmapId,
+        rankAsS32 = rankAsS32,
     )
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
@@ -134,12 +137,14 @@ private fun encodeUserStatsV490Layout(
     protocol: Protocol,
     packet: UserStatsPacket,
     maxTotalScore: Long?,
+    rankAsS32: Boolean = false,
 ): List<EncodedPacket> =
     encodeUserStatsV338Layout(
         protocol,
         packet.copy(info = packet.info.cappedTotalScore(maxTotalScore)),
         includeStatusMode = true,
         includeStatusBeatmapId = true,
+        rankAsS32 = rankAsS32,
     )
 
 fun encodeUserStatsV490(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
@@ -150,6 +155,14 @@ fun encodeUserStatsV504(protocol: Protocol, packet: UserStatsPacket): List<Encod
 
 fun encodeUserStatsV659(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
     encodeUserStatsV490Layout(protocol, packet, maxTotalScore = null)
+
+fun encodeUserStatsV695(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+    encodeUserStatsV490Layout(
+        protocol,
+        packet,
+        maxTotalScore = null,
+        rankAsS32 = true,
+    )
 
 fun encodeUserPresenceV282(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
     protocol.encodedPackets(UserStatsPacket(packet.info)).orEmpty()
@@ -170,12 +183,14 @@ private fun BinaryWriter.writeUserPresenceV338Layout(
     includePermissions: Boolean,
     includeStatusMode: Boolean = false,
     includeStatusBeatmapId: Boolean = false,
+    rankAsS32: Boolean = false,
 ) {
     writeUserStatsBodyV338(
         info,
         Completeness.Full,
-        includeStatusMode,
-        includeStatusBeatmapId,
+        includeStatusMode = includeStatusMode,
+        includeStatusBeatmapId = includeStatusBeatmapId,
+        rankAsS32 = rankAsS32,
     )
     writeString(info.name)
     writeString(info.avatarFilename)
@@ -222,6 +237,7 @@ private fun encodeUserPresenceV490Layout(
     protocol: Protocol,
     packet: UserPresencePacket,
     maxTotalScore: Long?,
+    rankAsS32: Boolean = false,
 ): List<EncodedPacket> {
     val info = packet.info.cappedTotalScore(maxTotalScore)
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
@@ -232,6 +248,7 @@ private fun encodeUserPresenceV490Layout(
         includePermissions = true,
         includeStatusMode = true,
         includeStatusBeatmapId = true,
+        rankAsS32 = rankAsS32,
     )
 
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
@@ -245,6 +262,14 @@ fun encodeUserPresenceV504(protocol: Protocol, packet: UserPresencePacket): List
 
 fun encodeUserPresenceV659(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
     encodeUserPresenceV490Layout(protocol, packet, maxTotalScore = null)
+
+fun encodeUserPresenceV695(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV490Layout(
+        protocol,
+        packet,
+        maxTotalScore = null,
+        rankAsS32 = true,
+    )
 
 fun encodeUserPresenceSingle(
     protocol: Protocol,
