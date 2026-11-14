@@ -45,7 +45,7 @@ class JavaInteropTest {
     @Test
     void customProtocolBuilderIsUsable() {
         ProtocolBuilder builder = new ProtocolBuilder(283);
-        builder.decode(PacketType.OsuExit, (_, _) -> ExitPacket.INSTANCE);
+        builder.decode(PacketType.OsuExit, (_, _) -> new ExitPacket());
         builder.encode(
                 LoginReplyPacket.class,
                 PacketType.BanchoLoginReply,
@@ -61,7 +61,7 @@ class JavaInteropTest {
     void publicApiConveniencesWork() {
         Protocol protocol = Protocols.select(282);
 
-        assertEquals(1600, Protocols.getLatest().getVersion());
+        assertEquals(1788, Protocols.getLatest().getVersion());
         assertEquals(282, Protocols.getInitial().getVersion());
         assertTrue(Protocols.getVersions().contains(340));
 
@@ -90,7 +90,7 @@ class JavaInteropTest {
                 false);
 
         InboundPacket packet = ProtocolIO.readBanchoPacket(source, protocol);
-        assertEquals(ExitPacket.INSTANCE, packet);
+        assertEquals(new ExitPacket(), packet);
 
         Buffer sink = new Buffer();
         ProtocolIO.writeBanchoPacket(sink, protocol, new LoginReplyPacket(3));

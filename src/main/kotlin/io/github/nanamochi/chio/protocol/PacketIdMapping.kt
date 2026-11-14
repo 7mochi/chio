@@ -100,3 +100,10 @@ object PacketIdMappingV340 : PacketIdMapping {
         return value
     }
 }
+
+/** 1788 and later use the shared ids as raw ids. */
+object PacketIdMappingV1788 : PacketIdMapping {
+    override fun packetType(rawId: Int): PacketType = PacketType.from(rawId)
+
+    override fun rawId(type: PacketType): Int = type.id
+}

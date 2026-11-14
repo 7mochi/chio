@@ -14,13 +14,15 @@ sealed interface InboundPacket
 
 data class UserStatusPacket(val status: UserStatus) : InboundPacket
 
+data class UserStatsRequestPacket(val ids: List<Int>) : InboundPacket
+
 data class MessagePacket(val message: Message) : InboundPacket
 
 data class PrivateMessagePacket(val message: Message) : InboundPacket
 
 data class SetIrcAwayMessagePacket(val message: Message) : InboundPacket
 
-data object ExitPacket : InboundPacket
+data class ExitPacket @JvmOverloads constructor(val updating: Boolean = false) : InboundPacket
 
 data object StatusUpdateRequestPacket : InboundPacket
 

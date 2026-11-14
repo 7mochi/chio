@@ -65,7 +65,7 @@ private fun ProtocolBuilder.registerInbound() {
     decode(PacketType.OsuMessage) { reader ->
         InboundMessagePacket(readChannelMessageV282(reader))
     }
-    decode(PacketType.OsuExit) { ExitPacket }
+    decode(PacketType.OsuExit) { ExitPacket() }
     decode(PacketType.OsuStartSpectating) { reader -> StartSpectatingPacket(reader.readInt()) }
     decode(PacketType.OsuSpectateFrames) { reader ->
         InboundSpectateFramesPacket(readSpectateFramesV282(reader))

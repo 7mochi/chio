@@ -10,10 +10,12 @@ import io.github.nanamochi.chio.packet.outbound.UserPresencePacket
 import io.github.nanamochi.chio.packet.outbound.UserPresenceSinglePacket
 import io.github.nanamochi.chio.packet.outbound.UserQuitPacket
 import io.github.nanamochi.chio.packet.outbound.UserStatsPacket
+import io.github.nanamochi.chio.packet.types.AvatarExtension
 import io.github.nanamochi.chio.packet.types.Completeness
 import io.github.nanamochi.chio.packet.types.QuitState
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.Protocol
+import kotlin.math.abs
 
 /** b365 to b490 clients crash when a user's total score exceeds this value. */
 private const val MAX_TOTAL_SCORE_V365 = 17_705_429_348L
@@ -289,6 +291,36 @@ fun encodeUserPresenceV1183(
         rankAsS32 = true,
         includeLocation = true,
     )
+
+fun encodeUserStatsV1788(packet: UserStatsPacket): List<EncodedPacket> {
+    val info = packet.info
+    val writer = BinaryWriter()
+    writer.writeInt(info.id)
+    writer.writeStatusV1788(info.status)
+    writer.writeULong(info.stats.rankedScore)
+    writer.writeFloat(info.stats.accuracy)
+    writer.writeUInt(info.stats.playcount)
+    writer.writeULong(info.stats.totalScore)
+    writer.writeInt(info.stats.rank)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
+}
+
+fun encodeUserPresenceV1788(packet: UserPresencePacket): List<EncodedPacket> {
+    val info = packet.info
+    val userId = if (info.presence.isIrc) -abs(info.id) else abs(info.id)
+    val writer = BinaryWriter()
+    writer.writeInt(userId)
+    writer.writeString(info.name)
+    writer.writeUByte(AvatarExtension.Png.value)
+    writer.writeUByte(info.presence.timezone + 24)
+    writer.writeString(info.presence.countryString)
+    writer.writeUByte(info.presence.permissions.bits)
+    writer.writeFloat(info.presence.longitude.toFloat())
+    writer.writeFloat(info.presence.latitude.toFloat())
+
+    return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
+}
 
 fun encodeUserPresenceSingle(
     protocol: Protocol,

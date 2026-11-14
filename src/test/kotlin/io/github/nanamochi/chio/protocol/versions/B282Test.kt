@@ -482,7 +482,7 @@ class B282Test {
     @Test
     fun `read exit`() {
         assertEquals(
-            ExitPacket,
+            ExitPacket(),
             protocol.decode(hex("0200140000001f8b08000000000002ff03000000000000000000")),
         )
     }
