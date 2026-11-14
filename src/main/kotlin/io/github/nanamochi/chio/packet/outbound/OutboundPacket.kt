@@ -99,6 +99,8 @@ data object MatchCompletePacket : OutboundPacket
 
 data object MatchSkipPacket : OutboundPacket
 
+data class MatchPlayerSkippedPacket(val slotId: Int) : OutboundPacket
+
 data object TitleUpdatePacket : OutboundPacket
 
 data class ChannelJoinSuccessPacket(val channel: String) : OutboundPacket

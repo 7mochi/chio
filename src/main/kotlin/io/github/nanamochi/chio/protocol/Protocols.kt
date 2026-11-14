@@ -1,6 +1,7 @@
 package io.github.nanamochi.chio.protocol
 
 import io.github.nanamochi.chio.protocol.versions.B1183
+import io.github.nanamochi.chio.protocol.versions.B1365
 import io.github.nanamochi.chio.protocol.versions.B282
 import io.github.nanamochi.chio.protocol.versions.B291
 import io.github.nanamochi.chio.protocol.versions.B294
@@ -73,6 +74,7 @@ object Protocols {
             put(659, B659)
             put(695, B695)
             put(1183, B1183)
+            put(1365, B1365)
         }
 
     @JvmStatic
