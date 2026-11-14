@@ -77,6 +77,8 @@ data class MatchChangeBeatmapPacket(val match: Match) : InboundPacket
 
 data class ChannelJoinPacket(val channel: String) : InboundPacket
 
+data class ChannelLeavePacket(val channel: String) : InboundPacket
+
 data class BeatmapInfoRequestPacket
 @JvmOverloads
 constructor(val filenames: List<String>, val ids: List<Int> = emptyList()) : InboundPacket
