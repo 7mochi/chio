@@ -18,6 +18,8 @@ data class MessagePacket(val message: Message) : InboundPacket
 
 data class PrivateMessagePacket(val message: Message) : InboundPacket
 
+data class SetIrcAwayMessagePacket(val message: Message) : InboundPacket
+
 data object ExitPacket : InboundPacket
 
 data object StatusUpdateRequestPacket : InboundPacket
