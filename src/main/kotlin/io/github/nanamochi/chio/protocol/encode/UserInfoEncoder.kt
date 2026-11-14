@@ -21,12 +21,14 @@ private const val MAX_TOTAL_SCORE_V365 = 17_705_429_348L
 /** b504 and later clients crash when a user's total score exceeds this higher value. */
 private const val MAX_TOTAL_SCORE_V504 = 26_931_190_827L
 
-internal fun UserInfo.cappedTotalScore(maxTotalScore: Long = MAX_TOTAL_SCORE_V365): UserInfo =
-    if (stats.totalScore <= maxTotalScore) {
+internal fun UserInfo.cappedTotalScore(maxTotalScore: Long? = MAX_TOTAL_SCORE_V365): UserInfo {
+    val cap = maxTotalScore ?: return this
+    return if (stats.totalScore <= cap) {
         this
     } else {
-        copy(stats = stats.copy(totalScore = maxTotalScore))
+        copy(stats = stats.copy(totalScore = cap))
     }
+}
 
 private fun Protocol.encodedIrcJoin(name: String): List<EncodedPacket> =
     encodedPackets(IrcJoinPacket(name)).orEmpty()
@@ -131,7 +133,7 @@ fun encodeUserStatsV489(protocol: Protocol, packet: UserStatsPacket): List<Encod
 private fun encodeUserStatsV490Layout(
     protocol: Protocol,
     packet: UserStatsPacket,
-    maxTotalScore: Long,
+    maxTotalScore: Long?,
 ): List<EncodedPacket> =
     encodeUserStatsV338Layout(
         protocol,
@@ -145,6 +147,9 @@ fun encodeUserStatsV490(protocol: Protocol, packet: UserStatsPacket): List<Encod
 
 fun encodeUserStatsV504(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
     encodeUserStatsV490Layout(protocol, packet, MAX_TOTAL_SCORE_V504)
+
+fun encodeUserStatsV659(protocol: Protocol, packet: UserStatsPacket): List<EncodedPacket> =
+    encodeUserStatsV490Layout(protocol, packet, maxTotalScore = null)
 
 fun encodeUserPresenceV282(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
     protocol.encodedPackets(UserStatsPacket(packet.info)).orEmpty()
@@ -216,7 +221,7 @@ fun encodeUserPresenceV489(protocol: Protocol, packet: UserPresencePacket): List
 private fun encodeUserPresenceV490Layout(
     protocol: Protocol,
     packet: UserPresencePacket,
-    maxTotalScore: Long,
+    maxTotalScore: Long?,
 ): List<EncodedPacket> {
     val info = packet.info.cappedTotalScore(maxTotalScore)
     if (info.presence.isIrc) return protocol.encodedIrcJoin(info.name)
@@ -237,6 +242,9 @@ fun encodeUserPresenceV490(protocol: Protocol, packet: UserPresencePacket): List
 
 fun encodeUserPresenceV504(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
     encodeUserPresenceV490Layout(protocol, packet, MAX_TOTAL_SCORE_V504)
+
+fun encodeUserPresenceV659(protocol: Protocol, packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV490Layout(protocol, packet, maxTotalScore = null)
 
 fun encodeUserPresenceSingle(
     protocol: Protocol,
