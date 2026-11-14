@@ -322,6 +322,23 @@ fun encodeUserPresenceV1788(packet: UserPresencePacket): List<EncodedPacket> {
     return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
 }
 
+fun encodeUserPresenceV1796(packet: UserPresencePacket): List<EncodedPacket> {
+    val info = packet.info
+    val userId = if (info.presence.isIrc) -abs(info.id) else abs(info.id)
+    val writer = BinaryWriter()
+    writer.writeInt(userId)
+    writer.writeString(info.name)
+    writer.writeUByte(AvatarExtension.Png.value)
+    writer.writeUByte(info.presence.timezone + 24)
+    writer.writeUByte(info.presence.countryIndex)
+    writer.writeString(info.presence.city)
+    writer.writeUByte(info.presence.permissions.bits)
+    writer.writeFloat(info.presence.longitude.toFloat())
+    writer.writeFloat(info.presence.latitude.toFloat())
+
+    return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
+}
+
 fun encodeUserPresenceSingle(
     protocol: Protocol,
     packet: UserPresenceSinglePacket,
