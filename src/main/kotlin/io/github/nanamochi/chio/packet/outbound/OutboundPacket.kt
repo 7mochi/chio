@@ -62,6 +62,8 @@ data class UserQuitPacket(val quit: UserQuit) : OutboundPacket
 
 data class InvitePacket(val message: Message) : OutboundPacket
 
+data object ChannelInfoCompletePacket : OutboundPacket
+
 data object GetAttentionPacket : OutboundPacket
 
 data class AnnouncePacket(val message: String) : OutboundPacket
