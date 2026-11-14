@@ -7,6 +7,7 @@ import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
 import io.github.nanamochi.chio.packet.model.ScoreFrame
 import io.github.nanamochi.chio.packet.model.UserStatus
 import io.github.nanamochi.chio.packet.types.Mods
+import io.github.nanamochi.chio.packet.types.PresenceFilter
 
 /** Messages a server receives from an osu! client. */
 sealed interface InboundPacket
@@ -78,6 +79,8 @@ data class MatchChangeBeatmapPacket(val match: Match) : InboundPacket
 data class ChannelJoinPacket(val channel: String) : InboundPacket
 
 data class ChannelLeavePacket(val channel: String) : InboundPacket
+
+data class ReceiveUpdatesPacket(val filter: PresenceFilter) : InboundPacket
 
 data class BeatmapInfoRequestPacket
 @JvmOverloads

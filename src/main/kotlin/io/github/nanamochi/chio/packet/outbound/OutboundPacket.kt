@@ -29,6 +29,8 @@ data class FriendsListPacket(val friends: List<Int>) : OutboundPacket
 
 data object PingPacket : OutboundPacket
 
+data object MonitorPacket : OutboundPacket
+
 data class MessagePacket(val message: Message) : OutboundPacket
 
 data class IrcChangeUsernamePacket(val oldName: String, val newName: String) : OutboundPacket
