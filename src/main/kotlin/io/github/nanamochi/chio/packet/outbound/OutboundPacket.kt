@@ -6,6 +6,7 @@ import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.model.Message
 import io.github.nanamochi.chio.packet.model.ReplayFrameBundle
 import io.github.nanamochi.chio.packet.model.ScoreFrame
+import io.github.nanamochi.chio.packet.model.TitleUpdate
 import io.github.nanamochi.chio.packet.model.UserInfo
 import io.github.nanamochi.chio.packet.model.UserQuit
 import io.github.nanamochi.chio.packet.types.Permissions
@@ -101,7 +102,8 @@ data object MatchSkipPacket : OutboundPacket
 
 data class MatchPlayerSkippedPacket(val slotId: Int) : OutboundPacket
 
-data object TitleUpdatePacket : OutboundPacket
+data class TitleUpdatePacket @JvmOverloads constructor(val update: TitleUpdate = TitleUpdate()) :
+    OutboundPacket
 
 data class ChannelJoinSuccessPacket(val channel: String) : OutboundPacket
 

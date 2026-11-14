@@ -144,7 +144,7 @@ class B535Test {
 
     @Test
     fun `title update is empty`() {
-        protocol.assertPacket("4d000000000000", protocol.encode(TitleUpdatePacket))
+        protocol.assertPacket("4d000000000000", protocol.encode(TitleUpdatePacket()))
     }
 
     @Test
@@ -171,7 +171,7 @@ class B535Test {
     fun `b504 doesn't support title update`() {
         val older = Protocols.select(504)
 
-        assertFailsWith<UnsupportedPacketException> { older.encode(TitleUpdatePacket) }
+        assertFailsWith<UnsupportedPacketException> { older.encode(TitleUpdatePacket()) }
     }
 }
 
