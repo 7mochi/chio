@@ -9,7 +9,7 @@ import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b487 adds protocol negotiation. */
+/** b487 adds [ProtocolNegotiationPacket] for bancho protocol negotiations. */
 val B487: Protocol =
     B470.derive(487) {
         registerOutbound()

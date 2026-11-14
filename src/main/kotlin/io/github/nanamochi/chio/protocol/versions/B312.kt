@@ -5,6 +5,7 @@ import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.MatchCompletePacket as InboundMatchCompletePacket
 import io.github.nanamochi.chio.packet.inbound.MatchScoreUpdatePacket as InboundMatchScoreUpdatePacket
 import io.github.nanamochi.chio.packet.inbound.MatchStartPacket as InboundMatchStartPacket
+import io.github.nanamochi.chio.packet.model.Match
 import io.github.nanamochi.chio.packet.outbound.MatchJoinSuccessPacket
 import io.github.nanamochi.chio.packet.outbound.MatchNewPacket
 import io.github.nanamochi.chio.packet.outbound.MatchScoreUpdatePacket as OutboundMatchScoreUpdatePacket
@@ -19,7 +20,10 @@ import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeMatchV312
 import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV296
 
-/** b312 adds match start/update and `inProgress` inside the match struct. */
+/**
+ * b312 adds the [PacketType.BanchoMatchStart] and [PacketType.BanchoMatchUpdate] packets, as well
+ * as the [Match.inProgress] boolean inside the [Match] struct.
+ */
 val B312: Protocol =
     B298.derive(312) {
         registerInbound()

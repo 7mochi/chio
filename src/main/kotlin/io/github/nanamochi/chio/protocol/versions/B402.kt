@@ -18,7 +18,7 @@ import io.github.nanamochi.chio.protocol.decode.readMatchV402
 import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeMatchV402
 
-/** b402 adds the host id to matches and lets clients request a host change. */
+/** b402 adds support for changing host players inside multiplayer matches. */
 val B402: Protocol =
     B388.derive(402) {
         registerInbound()

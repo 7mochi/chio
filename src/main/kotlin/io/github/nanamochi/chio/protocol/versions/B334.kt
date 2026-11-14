@@ -12,6 +12,8 @@ import io.github.nanamochi.chio.packet.inbound.MatchNoBeatmapPacket
 import io.github.nanamochi.chio.packet.inbound.MatchNotReadyPacket
 import io.github.nanamochi.chio.packet.inbound.MatchScoreUpdatePacket as InboundMatchScoreUpdatePacket
 import io.github.nanamochi.chio.packet.inbound.SpectateFramesPacket as InboundSpectateFramesPacket
+import io.github.nanamochi.chio.packet.model.Match
+import io.github.nanamochi.chio.packet.model.ScoreFrame
 import io.github.nanamochi.chio.packet.outbound.MatchAllPlayersLoadedPacket
 import io.github.nanamochi.chio.packet.outbound.MatchCompletePacket
 import io.github.nanamochi.chio.packet.outbound.MatchJoinSuccessPacket
@@ -38,8 +40,11 @@ import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV334
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV294
 
 /**
- * b334 introduces the compression flag, the match mods field, per-slot status bytes, checksum-less
- * score frames and packet ids 50–58.
+ * b334 introduces a lot of breaking changes:
+ * - Compression boolean inside [CompressionFlagPacketFormat]
+ * - Removal of checksums in [ScoreFrame]
+ * - [Mods] inside [Match] struct
+ * - Packet IDs 50-58
  */
 val B334: Protocol =
     B323.derive(334) {

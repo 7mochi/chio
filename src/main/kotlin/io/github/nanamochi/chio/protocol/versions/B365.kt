@@ -1,5 +1,6 @@
 package io.github.nanamochi.chio.protocol.versions
 
+import io.github.nanamochi.chio.packet.model.UserStats
 import io.github.nanamochi.chio.packet.outbound.UserPresencePacket
 import io.github.nanamochi.chio.packet.outbound.UserStatsPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
@@ -10,7 +11,10 @@ import io.github.nanamochi.chio.protocol.encode.cappedTotalScore
 import io.github.nanamochi.chio.protocol.encode.encodeUserPresenceV338
 import io.github.nanamochi.chio.protocol.encode.encodeUserStatsV338
 
-/** b365 caps the total score in user stats and presence to avoid a client crash. */
+/**
+ * b365 adds a level display on the user panel, which has a bug that causes the client to crash,
+ * when the user has a very high [UserStats.totalScore].
+ */
 val B365: Protocol =
     B354.derive(365) {
         registerOutbound()

@@ -9,6 +9,7 @@ import io.github.nanamochi.chio.packet.outbound.MatchJoinSuccessPacket
 import io.github.nanamochi.chio.packet.outbound.MatchNewPacket
 import io.github.nanamochi.chio.packet.outbound.MatchStartPacket
 import io.github.nanamochi.chio.packet.outbound.MatchUpdatePacket
+import io.github.nanamochi.chio.packet.types.Mode
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
 import io.github.nanamochi.chio.protocol.Protocol
@@ -17,7 +18,7 @@ import io.github.nanamochi.chio.protocol.decode.readMatchV470
 import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeMatchV470
 
-/** b470 adds the gamemode to matches. */
+/** b470 adds support for multiple [Mode]s in multiplayer matches. */
 val B470: Protocol =
     B452.derive(470) {
         registerInbound()

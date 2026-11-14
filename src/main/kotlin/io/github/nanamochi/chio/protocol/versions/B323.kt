@@ -13,7 +13,9 @@ import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.encodeUserPresenceV323
 import io.github.nanamochi.chio.protocol.encode.encodeUserStatsV323
 
-/** b323 changes user stats and adds the older MatchChangeBeatmap id. */
+/**
+ * b323 changes the structure of user stats and adds the [PacketType.OsuMatchChangeBeatmap] packet.
+ */
 val B323: Protocol =
     B320.derive(323) {
         idMapping = PacketIdMappingV323

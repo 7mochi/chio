@@ -7,7 +7,10 @@ import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b340 removes MatchChangeBeatmap and adds MatchHasBeatmap. */
+/**
+ * b340 removes the [PacketType.OsuMatchChangeBeatmap] packet, and introduces the
+ * [PacketType.OsuMatchHasBeatmap] packet.
+ */
 val B340: Protocol =
     B338.derive(340) {
         idMapping = PacketIdMappingV340

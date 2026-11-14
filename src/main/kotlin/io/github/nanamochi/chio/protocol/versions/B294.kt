@@ -5,6 +5,8 @@ import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.MessagePacket as InboundMessagePacket
 import io.github.nanamochi.chio.packet.inbound.PrivateMessagePacket
 import io.github.nanamochi.chio.packet.inbound.SpectateFramesPacket as InboundSpectateFramesPacket
+import io.github.nanamochi.chio.packet.model.Message
+import io.github.nanamochi.chio.packet.model.ScoreFrame
 import io.github.nanamochi.chio.packet.outbound.MessagePacket as OutboundMessagePacket
 import io.github.nanamochi.chio.packet.outbound.SpectateFramesPacket as OutboundSpectateFramesPacket
 import io.github.nanamochi.chio.protocol.EncodedPacket
@@ -20,7 +22,7 @@ import io.github.nanamochi.chio.protocol.encode.writeMessageV294
 import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV294
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV294
 
-/** b294 adds private messages and a score frame inside spectate frames. */
+/** b294 implements private messages ([Message]), as well as [ScoreFrame]s in spectating. */
 val B294: Protocol =
     B291.derive(294) {
         registerInbound()

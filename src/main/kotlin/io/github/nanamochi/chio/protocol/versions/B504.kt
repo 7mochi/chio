@@ -1,9 +1,11 @@
 package io.github.nanamochi.chio.protocol.versions
 
 import io.github.nanamochi.chio.packet.PacketType
+import io.github.nanamochi.chio.packet.model.BeatmapInfo
 import io.github.nanamochi.chio.packet.outbound.BeatmapInfoReplyPacket
 import io.github.nanamochi.chio.packet.outbound.UserPresencePacket
 import io.github.nanamochi.chio.packet.outbound.UserStatsPacket
+import io.github.nanamochi.chio.packet.types.Rank
 import io.github.nanamochi.chio.protocol.PacketEncoder
 import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
@@ -12,7 +14,7 @@ import io.github.nanamochi.chio.protocol.encode.encodeUserPresenceV504
 import io.github.nanamochi.chio.protocol.encode.encodeUserStatsV504
 import io.github.nanamochi.chio.protocol.encode.writeBeatmapInfoReplyV504
 
-/** b504 adds the taiko and fruits ranks and raises the total score cap. */
+/** b504 adds the taiko and fruits ranks ([Rank]) to the [BeatmapInfo] packet. */
 val B504: Protocol =
     B490.derive(504) {
         protocolVersion = 2

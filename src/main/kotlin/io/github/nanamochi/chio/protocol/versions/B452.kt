@@ -3,15 +3,17 @@ package io.github.nanamochi.chio.protocol.versions
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.FriendsAddPacket
 import io.github.nanamochi.chio.packet.inbound.FriendsRemovePacket
+import io.github.nanamochi.chio.packet.model.UserStats
 import io.github.nanamochi.chio.packet.outbound.FriendsListPacket
 import io.github.nanamochi.chio.packet.outbound.UserPresencePacket
+import io.github.nanamochi.chio.packet.types.Permissions
 import io.github.nanamochi.chio.protocol.PacketEncoder
 import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.encodeUserPresenceV452
 
-/** b452 adds friend management and permissions to user presences. */
+/** b452 adds friend management and [Permissions] to the user's [UserStats]. */
 val B452: Protocol =
     B425.derive(452) {
         registerInbound()

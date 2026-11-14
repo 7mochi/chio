@@ -2,6 +2,7 @@ package io.github.nanamochi.chio.protocol.versions
 
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.ChannelJoinPacket
+import io.github.nanamochi.chio.packet.model.Channel
 import io.github.nanamochi.chio.packet.outbound.ChannelAvailableAutojoinPacket
 import io.github.nanamochi.chio.packet.outbound.ChannelAvailablePacket
 import io.github.nanamochi.chio.packet.outbound.ChannelJoinSuccessPacket
@@ -10,7 +11,7 @@ import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b349 adds the Channel model and the channel join, revocation and availability packets. */
+/** b349 adds the [Channel] datatype and packets. */
 val B349: Protocol =
     B342.derive(349) {
         registerInbound()

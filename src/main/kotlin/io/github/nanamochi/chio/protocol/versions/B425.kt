@@ -2,11 +2,12 @@ package io.github.nanamochi.chio.protocol.versions
 
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.outbound.LoginPermissionsPacket
+import io.github.nanamochi.chio.packet.types.Permissions
 import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b425 sends the user's permissions during login. */
+/** b425 adds support for user [Permissions]. */
 val B425: Protocol =
     B402.derive(425) {
         registerOutbound()

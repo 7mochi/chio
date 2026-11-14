@@ -4,6 +4,7 @@ import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.MessagePacket as InboundMessagePacket
 import io.github.nanamochi.chio.packet.inbound.PrivateMessagePacket
+import io.github.nanamochi.chio.packet.model.Channel
 import io.github.nanamochi.chio.packet.outbound.MessagePacket as OutboundMessagePacket
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
@@ -13,7 +14,7 @@ import io.github.nanamochi.chio.protocol.decode.readMessageV320
 import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeMessageV320
 
-/** b320 adds the target field to messages and partial multi-channel support. */
+/** b320 adds partial support for multiple [Channel]s. */
 val B320: Protocol =
     B312.derive(320) {
         registerInbound()

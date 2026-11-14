@@ -14,6 +14,8 @@ import io.github.nanamochi.chio.packet.outbound.MatchStartPacket
 import io.github.nanamochi.chio.packet.outbound.MatchUpdatePacket
 import io.github.nanamochi.chio.packet.outbound.SpectateFramesPacket as OutboundSpectateFramesPacket
 import io.github.nanamochi.chio.packet.outbound.TitleUpdatePacket
+import io.github.nanamochi.chio.packet.types.ScoringType
+import io.github.nanamochi.chio.packet.types.TeamType
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
 import io.github.nanamochi.chio.protocol.Protocol
@@ -26,7 +28,10 @@ import io.github.nanamochi.chio.protocol.encode.writeMatchV535
 import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV535
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV374
 
-/** b535 adds the scoring and team types for multiplayer matches, as well as the tag multiplayer game mode */
+/**
+ * b535 adds the [ScoringType] and [TeamType] for multiplayer matches, as well as the
+ * [TeamType.TagTeamVs] multiplayer game mode.
+ */
 val B535: Protocol =
     B504.derive(535) {
         protocolVersion = 3

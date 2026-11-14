@@ -29,7 +29,7 @@ import io.github.nanamochi.chio.protocol.decode.readMatchV298
 import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeMatchV298
 
-/** b298 adds a partial multiplayer implementation and fellow spectators. */
+/** b298 adds a partial implementation of multiplayer, as well as fellow spectators. */
 val B298: Protocol =
     B296.derive(298) {
         registerInbound()

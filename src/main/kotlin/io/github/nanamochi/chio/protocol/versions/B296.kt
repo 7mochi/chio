@@ -3,6 +3,7 @@ package io.github.nanamochi.chio.protocol.versions
 import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.SpectateFramesPacket as InboundSpectateFramesPacket
+import io.github.nanamochi.chio.packet.model.ScoreFrame
 import io.github.nanamochi.chio.packet.outbound.SpectateFramesPacket as OutboundSpectateFramesPacket
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
@@ -14,7 +15,7 @@ import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV296
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV294
 
-/** b296 adds the time field to score frames. */
+/** b296 adds the [ScoreFrame.time] value to score frames. */
 val B296: Protocol =
     B294.derive(296) {
         registerInbound()

@@ -9,7 +9,7 @@ import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b291 adds GetAttention, Announce, and Restart implemented as an announce. */
+/** b291 implements the [PacketType.BanchoGetAttention] and [PacketType.BanchoAnnounce] packets. */
 val B291: Protocol =
     B282.derive(291) {
         registerOutbound()

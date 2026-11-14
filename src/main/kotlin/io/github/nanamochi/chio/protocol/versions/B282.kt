@@ -47,7 +47,10 @@ import io.github.nanamochi.chio.protocol.encode.writeMessageV282
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV282
 import io.github.nanamochi.chio.protocol.protocol
 
-/** Base implementation of the Bancho protocol. Every later version derives from this one. */
+/**
+ * b282 is the initial implementation of the bancho [Protocol]. Every following version will be
+ * based on it.
+ */
 val B282: Protocol =
     protocol(282) {
         format = LegacyPacketFormat

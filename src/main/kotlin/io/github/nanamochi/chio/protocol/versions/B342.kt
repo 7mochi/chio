@@ -7,7 +7,7 @@ import io.github.nanamochi.chio.protocol.Protocol
 import io.github.nanamochi.chio.protocol.ProtocolBuilder
 import io.github.nanamochi.chio.protocol.derive
 
-/** b342 adds the multiplayer skip packets. */
+/** b342 adds the [PacketType.OsuMatchSkipRequest] and [PacketType.BanchoMatchSkip] packets. */
 val B342: Protocol =
     B340.derive(342) {
         registerInbound()

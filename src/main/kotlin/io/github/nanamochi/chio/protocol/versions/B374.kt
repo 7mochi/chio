@@ -4,6 +4,7 @@ import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.PacketType
 import io.github.nanamochi.chio.packet.inbound.SpectateFramesPacket as InboundSpectateFramesPacket
 import io.github.nanamochi.chio.packet.outbound.SpectateFramesPacket as OutboundSpectateFramesPacket
+import io.github.nanamochi.chio.packet.types.ButtonState
 import io.github.nanamochi.chio.protocol.EncodedPacket
 import io.github.nanamochi.chio.protocol.PacketEncoder
 import io.github.nanamochi.chio.protocol.Protocol
@@ -14,7 +15,7 @@ import io.github.nanamochi.chio.protocol.derive
 import io.github.nanamochi.chio.protocol.encode.writeScoreFrameV334
 import io.github.nanamochi.chio.protocol.encode.writeSpectateFramesV374
 
-/** b374 replaces the replay frame mouse buttons with a button state byte. */
+/** b374 adds the [ButtonState] constant, which deprecates the old button left/right booleans. */
 val B374: Protocol =
     B365.derive(374) {
         registerInbound()
