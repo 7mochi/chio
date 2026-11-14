@@ -322,7 +322,16 @@ fun encodeUserPresenceV1788(packet: UserPresencePacket): List<EncodedPacket> {
     return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
 }
 
-fun encodeUserPresenceV1796(packet: UserPresencePacket): List<EncodedPacket> {
+fun encodeUserPresenceV1796(packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV1796Layout(packet, includeRank = false)
+
+fun encodeUserPresenceV1797(packet: UserPresencePacket): List<EncodedPacket> =
+    encodeUserPresenceV1796Layout(packet, includeRank = true)
+
+private fun encodeUserPresenceV1796Layout(
+    packet: UserPresencePacket,
+    includeRank: Boolean,
+): List<EncodedPacket> {
     val info = packet.info
     val userId = if (info.presence.isIrc) -abs(info.id) else abs(info.id)
     val writer = BinaryWriter()
@@ -335,6 +344,7 @@ fun encodeUserPresenceV1796(packet: UserPresencePacket): List<EncodedPacket> {
     writer.writeUByte(info.presence.permissions.bits)
     writer.writeFloat(info.presence.longitude.toFloat())
     writer.writeFloat(info.presence.latitude.toFloat())
+    if (includeRank) writer.writeInt(info.stats.rank)
 
     return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
 }
