@@ -94,6 +94,20 @@ fun BinaryWriter.writeMatchV1796(match: Match, slotSize: Int) {
     )
 }
 
+fun BinaryWriter.writeMatchV20120818(match: Match, slotSize: Int) {
+    writeMatchV334Layout(
+        match,
+        slotSize,
+        includeHost = true,
+        includeMode = true,
+        includeSlotTeams = true,
+        includePassword = true,
+        includeScoringAndTeam = true,
+        idAsU16 = true,
+        modsAsU32 = true,
+    )
+}
+
 private fun BinaryWriter.writeMatchV334Layout(
     match: Match,
     slotSize: Int,
@@ -103,13 +117,14 @@ private fun BinaryWriter.writeMatchV334Layout(
     includePassword: Boolean = false,
     includeScoringAndTeam: Boolean = false,
     idAsU16: Boolean = false,
+    modsAsU32: Boolean = false,
 ) {
     val slots = match.slotsForProtocol(slotSize)
 
     if (idAsU16) writeUShort(match.id) else writeUByte(match.id)
     writeBoolean(match.inProgress)
     writeUByte(match.type.value)
-    writeUShort(match.mods.bits)
+    if (modsAsU32) writeUInt(match.mods.bits) else writeUShort(match.mods.bits)
     writeString(match.name)
     if (includePassword) writeString(match.password)
     writeString(match.beatmapText)

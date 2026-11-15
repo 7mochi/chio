@@ -52,6 +52,16 @@ fun readUserStatusV1788(reader: BinaryReader): UserStatus =
         beatmapId = reader.readInt(),
     )
 
+fun readUserStatusV20120818(reader: BinaryReader): UserStatus =
+    UserStatus(
+        action = Status.from(reader.readUByte()),
+        text = reader.readString(),
+        beatmapChecksum = reader.readString(),
+        mods = Mods.fromBits(reader.readInt()),
+        mode = Mode.from(reader.readUByte()),
+        beatmapId = reader.readInt(),
+    )
+
 private fun readUserStatusV338Layout(
     reader: BinaryReader,
     includeMode: Boolean,

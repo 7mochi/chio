@@ -321,6 +321,21 @@ fun encodeUserStatsV20120723(packet: UserStatsPacket): List<EncodedPacket> {
     return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
 }
 
+fun encodeUserStatsV20120818(packet: UserStatsPacket): List<EncodedPacket> {
+    val info = packet.info
+    val writer = BinaryWriter()
+    writer.writeInt(info.id)
+    writer.writeStatusV20120818(info.status)
+    writer.writeULong(info.stats.rankedScore)
+    writer.writeFloat(info.stats.accuracy)
+    writer.writeUInt(info.stats.playcount)
+    writer.writeULong(info.stats.totalScore)
+    writer.writeInt(info.stats.rank)
+    writer.writeShort(info.stats.performancePoints)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserStats, writer.toByteArray()))
+}
+
 fun encodeUserPresenceV1788(packet: UserPresencePacket): List<EncodedPacket> {
     val info = packet.info
     val userId = if (info.presence.isIrc) -abs(info.id) else abs(info.id)

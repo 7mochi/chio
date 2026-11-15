@@ -48,3 +48,11 @@ fun BinaryWriter.writeStatusV1788(status: UserStatus) {
     writeInt(status.beatmapId)
 }
 
+fun BinaryWriter.writeStatusV20120818(status: UserStatus) {
+    writeUByte(status.action.value)
+    writeString(status.text)
+    writeString(status.beatmapChecksum)
+    writeUInt(status.mods.bits)
+    writeUByte(status.mode.value)
+    writeInt(status.beatmapId)
+}
