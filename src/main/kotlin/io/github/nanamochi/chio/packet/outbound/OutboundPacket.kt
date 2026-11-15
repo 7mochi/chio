@@ -90,6 +90,8 @@ data class SilenceInfoPacket @JvmOverloads constructor(val lengthSeconds: Int = 
 
 data class UserSilencedPacket(val userId: Int) : OutboundPacket
 
+data class UserDmsBlockedPacket(val username: String) : OutboundPacket
+
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 

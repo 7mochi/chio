@@ -30,6 +30,8 @@ data class PresenceRequestPacket(val ids: List<Int>) : InboundPacket
 
 data object PresenceRequestAllPacket : InboundPacket
 
+data class ChangeFriendOnlyDmsPacket(val enabled: Boolean) : InboundPacket
+
 
 data class ExitPacket @JvmOverloads constructor(val updating: Boolean = false) : InboundPacket
 
