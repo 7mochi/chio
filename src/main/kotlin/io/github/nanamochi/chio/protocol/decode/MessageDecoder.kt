@@ -22,3 +22,11 @@ fun readMessageV320(reader: BinaryReader): Message =
         content = reader.readString(),
         target = reader.readString(),
     )
+
+fun readMessageV20121225(reader: BinaryReader): Message =
+    Message(
+        sender = reader.readString(),
+        content = reader.readString(),
+        target = reader.readString(),
+        senderId = reader.readInt(),
+    )

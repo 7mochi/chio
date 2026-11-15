@@ -24,3 +24,8 @@ fun BinaryWriter.writeMessageV320(message: Message, formatChatLinks: Boolean) {
     writeMessageContent(message, formatChatLinks)
     writeString(message.target)
 }
+
+fun BinaryWriter.writeMessageV20121225(message: Message, formatChatLinks: Boolean) {
+    writeMessageV320(message, formatChatLinks)
+    writeInt(message.senderId)
+}
