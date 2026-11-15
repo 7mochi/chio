@@ -24,6 +24,9 @@ data class SetIrcAwayMessagePacket(val message: Message) : InboundPacket
 
 data class InvitePacket(val userId: Int) : InboundPacket
 
+data class TournamentMatchInfoPacket(val matchId: Int) : InboundPacket
+
+
 data class ExitPacket @JvmOverloads constructor(val updating: Boolean = false) : InboundPacket
 
 data object StatusUpdateRequestPacket : InboundPacket
