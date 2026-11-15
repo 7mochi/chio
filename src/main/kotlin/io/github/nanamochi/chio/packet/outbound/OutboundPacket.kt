@@ -86,6 +86,9 @@ data class MatchChangePasswordPacket(val password: String) : OutboundPacket
 
 data object MatchJoinFailPacket : OutboundPacket
 
+data class SilenceInfoPacket @JvmOverloads constructor(val lengthSeconds: Int = -1) : OutboundPacket
+
+
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
 data class FellowSpectatorLeftPacket(val userId: Int) : OutboundPacket
