@@ -104,6 +104,9 @@ data object AccountRestrictedPacket : OutboundPacket
 data class RTXPacket @JvmOverloads constructor(val message: String = "Zallius' eyes have awoken") :
     OutboundPacket
 
+data object MatchAbortPacket : OutboundPacket
+
+data class SwitchTournamentServerPacket(val server: String) : OutboundPacket
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
