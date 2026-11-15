@@ -26,6 +26,10 @@ data class InvitePacket(val userId: Int) : InboundPacket
 
 data class TournamentMatchInfoPacket(val matchId: Int) : InboundPacket
 
+data class PresenceRequestPacket(val ids: List<Int>) : InboundPacket
+
+data object PresenceRequestAllPacket : InboundPacket
+
 
 data class ExitPacket @JvmOverloads constructor(val updating: Boolean = false) : InboundPacket
 

@@ -432,3 +432,25 @@ fun encodeUserQuit(protocol: Protocol, packet: UserQuitPacket): List<EncodedPack
 
     return stats.take(1).map { EncodedPacket(PacketType.BanchoUserQuit, it.payload) }
 }
+
+fun encodeUserQuitV20121224(packet: UserQuitPacket): List<EncodedPacket> {
+    val writer = BinaryWriter()
+    writer.writeInt(packet.quit.info.id)
+    writer.writeUByte(packet.quit.state.value)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserQuit, writer.toByteArray()))
+}
+
+fun encodeUserPresenceSingleV20121224(packet: UserPresenceSinglePacket): List<EncodedPacket> {
+    val writer = BinaryWriter()
+    writer.writeInt(packet.info.id)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserPresenceSingle, writer.toByteArray()))
+}
+
+fun encodeUserPresenceBundleV20121224(packet: UserPresenceBundlePacket): List<EncodedPacket> {
+    val writer = BinaryWriter()
+    writer.writeIntList16(packet.infos.map { it.id }.toIntArray())
+
+    return listOf(EncodedPacket(PacketType.BanchoUserPresenceBundle, writer.toByteArray()))
+}
