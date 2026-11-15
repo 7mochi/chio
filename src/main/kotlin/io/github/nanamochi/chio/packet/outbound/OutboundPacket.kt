@@ -96,6 +96,9 @@ data class TargetIsSilencedPacket(val username: String) : OutboundPacket
 
 data object VersionUpdateForcedPacket : OutboundPacket
 
+data class SwitchServerPacket @JvmOverloads constructor(val afterIdleTime: Int = 3600) :
+    OutboundPacket
+
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
