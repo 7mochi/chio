@@ -88,6 +88,8 @@ data object MatchJoinFailPacket : OutboundPacket
 
 data class SilenceInfoPacket @JvmOverloads constructor(val lengthSeconds: Int = -1) : OutboundPacket
 
+data class UserSilencedPacket(val userId: Int) : OutboundPacket
+
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
