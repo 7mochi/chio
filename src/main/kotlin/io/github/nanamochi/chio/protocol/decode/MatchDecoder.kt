@@ -127,6 +127,21 @@ fun readMatchV20120818(reader: BinaryReader, slotSize: Int): Match =
         modsAsU32 = true,
     )
 
+fun readMatchV20130118(reader: BinaryReader, slotSize: Int): Match =
+    readMatchV334Layout(
+        reader,
+        slotSize,
+        includeHost = true,
+        includeMode = true,
+        includeSlotTeams = true,
+        includePassword = true,
+        includeScoringAndTeam = true,
+        optionalScoringAndTeam = false,
+        idAsU16 = true,
+        modsAsU32 = true,
+        includeFreemod = true,
+    )
+
 private fun readMatchV334Layout(
     reader: BinaryReader,
     slotSize: Int,
@@ -138,6 +153,7 @@ private fun readMatchV334Layout(
     optionalScoringAndTeam: Boolean = true,
     idAsU16: Boolean = false,
     modsAsU32: Boolean = false,
+    includeFreemod: Boolean = false,
 ): Match {
     val id = if (idAsU16) reader.readUShort() else reader.readUByte()
     val inProgress = reader.readBoolean()
@@ -169,6 +185,7 @@ private fun readMatchV334Layout(
             teamType = TeamType.from(reader.readUByte())
         }
     }
+    val freemod = if (includeFreemod) reader.readBoolean() else false
 
     return Match(
         id = id,
@@ -185,6 +202,7 @@ private fun readMatchV334Layout(
         mode = mode,
         scoringType = scoringType,
         teamType = teamType,
+        freemod = freemod,
     )
 }
 
