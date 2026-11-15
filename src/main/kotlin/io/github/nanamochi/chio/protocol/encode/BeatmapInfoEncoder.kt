@@ -62,3 +62,12 @@ fun BinaryWriter.writeBeatmapInfoReplyV20150826(beatmaps: List<BeatmapInfo>) {
     )
 }
 
+fun BinaryWriter.writeBeatmapInfoReplyV20161101(beatmaps: List<BeatmapInfo>) {
+    writeBeatmapInfoReplyLayout(
+        beatmaps,
+        includeExtraRanks = true,
+        includeManiaRank = true,
+        qualifiedValue = 3,
+        lovedValue = 4,
+    )
+}
