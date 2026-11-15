@@ -4,20 +4,25 @@ import io.github.nanamochi.chio.binary.BinaryWriter
 import io.github.nanamochi.chio.packet.model.BeatmapInfo
 import io.github.nanamochi.chio.packet.types.RankedStatus
 
-private fun RankedStatus.beatmapInfoValue(): Int =
+private fun RankedStatus.beatmapInfoValue(
+    qualifiedValue: Int = 2,
+    lovedValue: Int = 2,
+): Int =
     when (this) {
         RankedStatus.NotSubmitted -> -1
         RankedStatus.Pending -> 0
         RankedStatus.Ranked -> 1
-        RankedStatus.Approved,
-        RankedStatus.Qualified,
-        RankedStatus.Loved -> 2
+        RankedStatus.Approved -> 2
+        RankedStatus.Qualified -> qualifiedValue
+        RankedStatus.Loved -> lovedValue
     }
 
 private fun BinaryWriter.writeBeatmapInfoReplyLayout(
     beatmaps: List<BeatmapInfo>,
     includeExtraRanks: Boolean,
     includeManiaRank: Boolean = false,
+    qualifiedValue: Int = 2,
+    lovedValue: Int = 2,
 ) {
     writeUInt(beatmaps.size)
     beatmaps.forEach { info ->
@@ -25,7 +30,7 @@ private fun BinaryWriter.writeBeatmapInfoReplyLayout(
         writeInt(info.beatmapId)
         writeInt(info.beatmapSetId)
         writeInt(info.threadId)
-        writeByte(info.rankedStatus.beatmapInfoValue())
+        writeByte(info.rankedStatus.beatmapInfoValue(qualifiedValue, lovedValue))
         writeByte(info.osuRank.value)
         if (includeExtraRanks) {
             writeByte(info.fruitsRank.value)
@@ -46,5 +51,14 @@ fun BinaryWriter.writeBeatmapInfoReplyV504(beatmaps: List<BeatmapInfo>) {
 
 fun BinaryWriter.writeBeatmapInfoReplyV20121028(beatmaps: List<BeatmapInfo>) {
     writeBeatmapInfoReplyLayout(beatmaps, includeExtraRanks = true, includeManiaRank = true)
+}
+
+fun BinaryWriter.writeBeatmapInfoReplyV20150826(beatmaps: List<BeatmapInfo>) {
+    writeBeatmapInfoReplyLayout(
+        beatmaps,
+        includeExtraRanks = true,
+        includeManiaRank = true,
+        qualifiedValue = 3,
+    )
 }
 
