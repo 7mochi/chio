@@ -82,6 +82,8 @@ data class LobbyPartPacket(val userId: Int) : OutboundPacket
 
 data class MatchJoinSuccessPacket(val match: Match) : OutboundPacket
 
+data class MatchChangePasswordPacket(val password: String) : OutboundPacket
+
 data object MatchJoinFailPacket : OutboundPacket
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket

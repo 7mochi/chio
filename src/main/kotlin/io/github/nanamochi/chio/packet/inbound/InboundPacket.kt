@@ -58,6 +58,8 @@ data class MatchLockPacket(val slotId: Int) : InboundPacket
 
 data class MatchChangeSettingsPacket(val match: Match) : InboundPacket
 
+data class MatchChangePasswordPacket(val match: Match) : InboundPacket
+
 data object MatchChangeTeamPacket : InboundPacket
 
 data object MatchStartPacket : InboundPacket

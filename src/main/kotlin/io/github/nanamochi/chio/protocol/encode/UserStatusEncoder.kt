@@ -47,3 +47,4 @@ fun BinaryWriter.writeStatusV1788(status: UserStatus) {
     writeUByte(status.mode.value)
     writeInt(status.beatmapId)
 }
+
