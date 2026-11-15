@@ -361,6 +361,23 @@ fun encodeUserPresenceV1797(packet: UserPresencePacket): List<EncodedPacket> =
 fun encodeUserPresenceV20120806(packet: UserPresencePacket): List<EncodedPacket> =
     encodeUserPresenceV1796Layout(packet, includeRank = true, includeMode = true)
 
+fun encodeUserPresenceV20121203(packet: UserPresencePacket): List<EncodedPacket> {
+    val info = packet.info
+    val userId = if (info.presence.isIrc) -abs(info.id) else abs(info.id)
+    val writer = BinaryWriter()
+    writer.writeInt(userId)
+    writer.writeString(info.name)
+    writer.writeUByte(info.presence.timezone + 24)
+    writer.writeUByte(info.presence.countryIndex)
+    writer.writeUByte(info.presence.permissions.bits or (info.status.mode.value shl 5))
+    writer.writeFloat(info.presence.longitude.toFloat())
+    writer.writeFloat(info.presence.latitude.toFloat())
+    writer.writeInt(info.stats.rank)
+    writer.writeUByte(info.status.mode.value)
+
+    return listOf(EncodedPacket(PacketType.BanchoUserPresence, writer.toByteArray()))
+}
+
 private fun encodeUserPresenceV1796Layout(
     packet: UserPresencePacket,
     includeRank: Boolean,
