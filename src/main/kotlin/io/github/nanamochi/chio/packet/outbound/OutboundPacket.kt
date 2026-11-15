@@ -101,6 +101,9 @@ data class SwitchServerPacket @JvmOverloads constructor(val afterIdleTime: Int =
 
 data object AccountRestrictedPacket : OutboundPacket
 
+data class RTXPacket @JvmOverloads constructor(val message: String = "Zallius' eyes have awoken") :
+    OutboundPacket
+
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
