@@ -32,6 +32,9 @@ data object PresenceRequestAllPacket : InboundPacket
 
 data class ChangeFriendOnlyDmsPacket(val enabled: Boolean) : InboundPacket
 
+data class TournamentJoinMatchChannelPacket(val matchId: Int) : InboundPacket
+
+data class TournamentLeaveMatchChannelPacket(val matchId: Int) : InboundPacket
 
 data class ExitPacket @JvmOverloads constructor(val updating: Boolean = false) : InboundPacket
 
