@@ -20,6 +20,9 @@ constructor(
     val hp: Int,
     /** Protocol-specific tag byte used by newer clients. */
     val tagByte: Int = 0,
+    val usingScoreV2: Boolean = false,
+    val comboPortion: Double = 0.0,
+    val bonusPortion: Double = 0.0,
 ) {
     val passed: Boolean
         get() = hp != 254

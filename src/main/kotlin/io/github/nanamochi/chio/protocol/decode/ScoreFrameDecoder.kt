@@ -37,3 +37,17 @@ fun readScoreFrameV535(reader: BinaryReader): ScoreFrame {
     val frame = readScoreFrameBody(reader, reader.readInt())
     return if (reader.hasRemaining()) frame.copy(tagByte = reader.readUByte()) else frame
 }
+
+fun readScoreFrameV20151106(reader: BinaryReader): ScoreFrame {
+    val frame = readScoreFrameV535(reader)
+    val usingScoreV2 = reader.readBoolean()
+    return if (usingScoreV2) {
+        frame.copy(
+            usingScoreV2 = true,
+            comboPortion = reader.readDouble(),
+            bonusPortion = reader.readDouble(),
+        )
+    } else {
+        frame
+    }
+}

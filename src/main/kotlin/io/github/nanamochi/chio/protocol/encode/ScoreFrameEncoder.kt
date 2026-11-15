@@ -39,3 +39,12 @@ fun BinaryWriter.writeScoreFrameV535(frame: ScoreFrame) {
     writeScoreFrameBody(frame)
     writeUByte(frame.tagByte)
 }
+
+fun BinaryWriter.writeScoreFrameV20151106(frame: ScoreFrame) {
+    writeScoreFrameV535(frame)
+    writeBoolean(frame.usingScoreV2)
+    if (frame.usingScoreV2) {
+        writeDouble(frame.comboPortion)
+        writeDouble(frame.bonusPortion)
+    }
+}
