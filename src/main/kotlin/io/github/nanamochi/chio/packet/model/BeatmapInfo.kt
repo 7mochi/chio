@@ -15,6 +15,7 @@ constructor(
     val checksum: String = "",
     val fruitsRank: Rank = Rank.N,
     val taikoRank: Rank = Rank.N,
+    val maniaRank: Rank = Rank.N,
 ) {
     val isRanked: Boolean
         get() = rankedStatus.isRanked

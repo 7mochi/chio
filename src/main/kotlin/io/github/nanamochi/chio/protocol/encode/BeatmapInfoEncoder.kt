@@ -17,6 +17,7 @@ private fun RankedStatus.beatmapInfoValue(): Int =
 private fun BinaryWriter.writeBeatmapInfoReplyLayout(
     beatmaps: List<BeatmapInfo>,
     includeExtraRanks: Boolean,
+    includeManiaRank: Boolean = false,
 ) {
     writeUInt(beatmaps.size)
     beatmaps.forEach { info ->
@@ -30,6 +31,7 @@ private fun BinaryWriter.writeBeatmapInfoReplyLayout(
             writeByte(info.fruitsRank.value)
             writeByte(info.taikoRank.value)
         }
+        if (includeManiaRank) writeByte(info.maniaRank.value)
         writeString(info.checksum)
     }
 }
@@ -41,3 +43,8 @@ fun BinaryWriter.writeBeatmapInfoReplyV388(beatmaps: List<BeatmapInfo>) {
 fun BinaryWriter.writeBeatmapInfoReplyV504(beatmaps: List<BeatmapInfo>) {
     writeBeatmapInfoReplyLayout(beatmaps, includeExtraRanks = true)
 }
+
+fun BinaryWriter.writeBeatmapInfoReplyV20121028(beatmaps: List<BeatmapInfo>) {
+    writeBeatmapInfoReplyLayout(beatmaps, includeExtraRanks = true, includeManiaRank = true)
+}
+

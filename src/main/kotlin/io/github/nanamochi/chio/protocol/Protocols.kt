@@ -16,6 +16,7 @@ import io.github.nanamochi.chio.protocol.versions.B20120725
 import io.github.nanamochi.chio.protocol.versions.B20120806
 import io.github.nanamochi.chio.protocol.versions.B20120818
 import io.github.nanamochi.chio.protocol.versions.B20121023
+import io.github.nanamochi.chio.protocol.versions.B20121028
 import io.github.nanamochi.chio.protocol.versions.B282
 import io.github.nanamochi.chio.protocol.versions.B291
 import io.github.nanamochi.chio.protocol.versions.B294
@@ -103,6 +104,7 @@ object Protocols {
             put(20120806, B20120806)
             put(20120818, B20120818)
             put(20121023, B20121023)
+            put(20121028, B20121028)
         }
 
     @JvmStatic
