@@ -59,3 +59,14 @@ fun BinaryWriter.writeSpectateFramesV20130418(
     writeSpectateFramesV374(bundle, writeScore)
 }
 
+fun BinaryWriter.writeSpectateFramesV20160404(
+    bundle: ReplayFrameBundle,
+    writeScore: BinaryWriter.(ScoreFrame) -> Unit,
+) {
+    writeInt(bundle.extra)
+    writeUShort(bundle.frames.size)
+    bundle.frames.forEach { writeReplayFrameV374(it) }
+    writeUByte(bundle.action.value)
+    bundle.frame?.let { this.writeScore(it) }
+    writeUShort(bundle.sequence)
+}

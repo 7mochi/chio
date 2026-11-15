@@ -71,3 +71,21 @@ fun readSpectateFramesV20130418(
     return readSpectateFramesV374(reader, readScore).copy(extra = extra)
 }
 
+fun readSpectateFramesV20160404(
+    reader: BinaryReader,
+    readScore: (BinaryReader) -> ScoreFrame,
+): ReplayFrameBundle {
+    val extra = reader.readInt()
+    val frames = List(reader.readUShort()) { readReplayFrameV374(reader) }
+    val action = ReplayAction.from(reader.readUByte())
+    val frame = if (reader.remaining > 2) readScore(reader) else null
+    val sequence = reader.readUShort()
+
+    return ReplayFrameBundle(
+        action = action,
+        frames = frames,
+        frame = frame,
+        extra = extra,
+        sequence = sequence,
+    )
+}

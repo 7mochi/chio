@@ -9,4 +9,5 @@ constructor(
     val frames: List<ReplayFrame> = emptyList(),
     val frame: ScoreFrame? = null,
     val extra: Int = -1,
+    val sequence: Int = 0,
 )
