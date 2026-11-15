@@ -139,6 +139,23 @@ fun BinaryWriter.writeMatchV20130303(match: Match, slotSize: Int) {
     )
 }
 
+fun BinaryWriter.writeMatchV20130418(match: Match, slotSize: Int) {
+    writeMatchV334Layout(
+        match,
+        slotSize,
+        includeHost = true,
+        includeMode = true,
+        includeSlotTeams = true,
+        includePassword = true,
+        includeScoringAndTeam = true,
+        idAsU16 = true,
+        modsAsU32 = true,
+        includeFreemod = true,
+        includeSlotMods = true,
+        includeSeed = true,
+    )
+}
+
 private fun BinaryWriter.writeMatchV334Layout(
     match: Match,
     slotSize: Int,
@@ -151,6 +168,7 @@ private fun BinaryWriter.writeMatchV334Layout(
     modsAsU32: Boolean = false,
     includeFreemod: Boolean = false,
     includeSlotMods: Boolean = false,
+    includeSeed: Boolean = false,
 ) {
     val slots = match.slotsForProtocol(slotSize)
 
@@ -178,4 +196,5 @@ private fun BinaryWriter.writeMatchV334Layout(
     if (includeSlotMods && match.freemod) {
         slots.forEach { writeUInt(it.mods.bits) }
     }
+    if (includeSeed) writeUInt(match.seed)
 }

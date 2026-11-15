@@ -8,4 +8,5 @@ constructor(
     val action: ReplayAction = ReplayAction.Standard,
     val frames: List<ReplayFrame> = emptyList(),
     val frame: ScoreFrame? = null,
+    val extra: Int = -1,
 )

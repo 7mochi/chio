@@ -61,3 +61,13 @@ fun readSpectateFramesV374(
 
     return ReplayFrameBundle(action = action, frames = frames, frame = frame)
 }
+
+fun readSpectateFramesV20130418(
+    reader: BinaryReader,
+    readScore: (BinaryReader) -> ScoreFrame,
+): ReplayFrameBundle {
+    val extra = reader.readInt()
+
+    return readSpectateFramesV374(reader, readScore).copy(extra = extra)
+}
+

@@ -50,3 +50,12 @@ fun BinaryWriter.writeSpectateFramesV374(
     writeUByte(bundle.action.value)
     bundle.frame?.let { this.writeScore(it) }
 }
+
+fun BinaryWriter.writeSpectateFramesV20130418(
+    bundle: ReplayFrameBundle,
+    writeScore: BinaryWriter.(ScoreFrame) -> Unit,
+) {
+    writeInt(bundle.extra)
+    writeSpectateFramesV374(bundle, writeScore)
+}
+
