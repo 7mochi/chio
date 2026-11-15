@@ -94,6 +94,8 @@ data class UserDmsBlockedPacket(val username: String) : OutboundPacket
 
 data class TargetIsSilencedPacket(val username: String) : OutboundPacket
 
+data object VersionUpdateForcedPacket : OutboundPacket
+
 
 data class FellowSpectatorJoinedPacket(val userId: Int) : OutboundPacket
 
