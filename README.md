@@ -1,5 +1,9 @@
 # Chio
 
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.7mochi/chio/badge.svg)](https://central.sonatype.com/artifact/io.github.7mochi/chio)
+![GitHub branch status](https://img.shields.io/github/checks-status/7mochi/chio/master)
+![GitHub License](https://img.shields.io/github/license/7mochi/chio)
+
 **Chio (Bancho I/O)** is a Kotlin library for serializing and deserializing osu! Bancho packets. It
 targets osu! versions released between 2008 and 2026. Not all of them are implemented yet. It's a port of
 [chio.py](https://github.com/Lekuruu/chio.py) and
@@ -102,6 +106,24 @@ builder.encodeEmpty(PingPacket.class, PacketType.BanchoPing);
 Protocol custom = builder.build();
 ```
 
+## Install
+
+Chio is available on the Sonatype Central Repository. These can be used without having to compile the project yourself.
+
+Maven:
+```xml
+<dependency>
+    <groupId>io.github.7mochi</groupId>
+    <artifactId>chio</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+
+Gradle:
+```groovy
+implementation 'io.github.7mochi:chio:0.0.1'
+``` 
+
 ## Build
 
 ```bash
@@ -133,3 +155,8 @@ Update `nix/packages/chio/deps.json` with
   [chio.py](https://github.com/Lekuruu/chio.py),
   [chio-sharp](https://github.com/Lekuruu/chio-sharp) and
   [bancho-documentation](https://github.com/Lekuruu/bancho-documentation).
+
+
+## License
+
+Chio is licensed under the [GNU Affero General Public License v3.0 or later](LICENSE).
