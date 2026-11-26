@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "chio";
-  version = "1.0-SNAPSHOT";
+  version = "0.0.0";
 
   src = lib.fileset.toSource {
     root = ../../..;

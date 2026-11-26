@@ -5,6 +5,7 @@
     {
       devShells.default = pkgs.mkShell {
         packages = with pkgs; [
+          bump-my-version
           jdk25
           just
           nixfmt
@@ -18,6 +19,7 @@
           echo "  just format"
           echo "  just lint"
           echo "  just clean"
+          echo "  just bump [patch|minor|major]"
         '';
       };
     };
