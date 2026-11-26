@@ -14,7 +14,7 @@ plugins {
     id("com.gradleup.nmcp.aggregation") version "1.6.2"
 }
 
-group = "io.github.nanamochi"
+group = "io.github.7mochi"
 version = "0.0.0"
 
 kotlin {

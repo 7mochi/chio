@@ -52,7 +52,7 @@ jobs:
     timeout-minutes: 30
     environment:
       name: maven
-      url: https://central.sonatype.com/artifact/io.github.nanamochi/chio
+      url: https://central.sonatype.com/artifact/io.github.7mochi/chio
     permissions:
       contents: read
 
