@@ -122,7 +122,7 @@ Maven:
 Gradle:
 ```groovy
 implementation 'io.github.7mochi:chio:0.0.1'
-``` 
+```
 
 ## Build
 
