@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "io.github.7mochi"
-version = "0.0.0"
+version = "0.0.1"
 
 kotlin {
     jvmToolchain(25)
